@@ -10,7 +10,7 @@ from .serializers import ReservationSerializer
 def index(request):
     Reservations = Reservation.objects.all()
 
-    return render(request, "index.html", {"ReserReservations": Reservations})
+    return render(request, "index.html", {"Reservations": Reservations})
 
 
 @api_view(["GET", "PUT", "DELETE"])
