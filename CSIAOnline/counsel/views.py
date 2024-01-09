@@ -18,7 +18,7 @@ def reservation_api(request):
     if request.method == "GET":
         # Logic for GET request
         Reservations = Reservation.objects.all()
-        serializer = ReservationSerializer(reservations, many=True)
+        serializer = ReservationSerializer(Reservations, many=True)
         return Response(serializer.data)
 
     elif request.method == "PUT":
