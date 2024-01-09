@@ -1,75 +1,6 @@
 let studentData = {};
 apiURL = "http://127.0.0.1:8000";
 
-// Function to update a reservation
-// Function to update student reservation data
-async function updateReservation(reservation_data) {
-  try {
-    // Iterate over the reservation data
-    for (const timeSlot in reservation_data) {
-      if (reservation_data.hasOwnProperty(timeSlot)) {
-        const reservation = reservation_data[timeSlot];
-
-        // Find the corresponding buttons in the HTML
-        const makeButton = document.querySelector(
-          `button[data-time-slot="${timeSlot}"][data-action="Make"]`
-        );
-        const deleteButton = document.querySelector(
-          `button[data-time-slot="${timeSlot}"][data-action="Delete"]`
-        );
-
-        // Check the availability in the reservation data
-        if (reservation.availability) {
-          // If available, show "Make Reservation" button and hide "Delete Reservation" button
-          makeButton.style.display = "block";
-          deleteButton.style.display = "none";
-        } else {
-          // If not available, hide both buttons
-          makeButton.style.display = "none";
-          deleteButton.style.display = "none";
-        }
-      }
-    }
-  } catch (error) {
-    console.error("Error updating reservation:", error);
-    // You can add user-friendly error handling here, like displaying an error message to the user.
-  }
-}
-
-// Function to fetch reservation data from Django
-/** 
-async function fetchReservationData(apiURL) {
-  try {
-    const response = await fetch(apiURL, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error fetching reservation data");
-    }
-
-    const data = await response.json();
-    console.log("Reservation Data:", data);
-    updateReservation(data);
-
-    // Process the reservation data as needed
-    // For example, you might update the UI based on this data
-    // ...
-  } catch (error) {
-    console.error("Error fetching reservation data:", error);
-    // You can add user-friendly error handling here, like displaying an error message to the user.
-  }
-}
-*/
-// Call the fetchReservationData function when the document is ready
-/** 
-document.addEventListener("DOMContentLoaded", function () {
-  fetchReservationData(apiURL);
-});
-*/
 // Function to delete a reservation and update the availability row
 async function deleteReservation(apiURL, timeSlot) {
   // Check if student data is available
@@ -232,34 +163,6 @@ document
     });
   });
 
-// Function to handle login and update reservation data
-/** 
-function studentLogin() {
-  const nameInput = document.getElementById("name").value;
-  const gradeLevelInput = document.getElementById("gradeLevel").value;
-  const genderSelect = document.getElementById("gender");
-  const genderInput = genderSelect.options[genderSelect.selectedIndex].value;
-
-  console.log("success");
-
-  // Check if all fields are filled
-  if (nameInput && gradeLevelInput && genderInput != "Gender") {
-    studentData = {
-      name: nameInput,
-      gradeLevel: gradeLevelInput,
-      gender: genderInput,
-    };
-    alert("logged in successfully");
-    console.log(studentData);
-    //appear button on top of time periods to enable reservation
-  } else {
-    alert("Please fill in all the fields.");
-  }
-}
-*/
-//teacher login
-// ...
-
 // Function to handle teacher login
 function teacherLogin() {
   const teacherNameInput = document.getElementById("teacherName").value;
@@ -286,9 +189,3 @@ document
 document.getElementById("loginButton").addEventListener("click", () => {
   window.location.href = "/login";
 });
-
-// Example usage of the deleteReservation function:
-// document.getElementById('deleteReservationButton').addEventListener('click', () => {
-//     const reservationIdToDelete = 'your_reservation_id_to_delete';
-//     deleteReservation('https://example.com/api/delete-reservation', reservationIdToDelete);
-// });
