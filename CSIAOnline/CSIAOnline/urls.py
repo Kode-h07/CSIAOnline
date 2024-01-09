@@ -21,5 +21,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("login.urls")),  # Blank root for login app
     path("counsel/", include("counsel.urls")),  # 'app1/' path for app1
+    path("login/", include("login.urls")),  # Include login app URLs
+    path("home/", include("home.urls")),
     # Add other app paths as needed
 ]
