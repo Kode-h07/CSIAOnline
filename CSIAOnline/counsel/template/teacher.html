@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservation Status</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #banner {
+            background-color: #00cc00; /* Green color for "Come Now" */
+            color: white;
+            padding: 10px;
+        }
+        #loginContainer {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+        #loginButton {
+            margin-left: 10px;
+        }
+        #userInput {
+            text-align: right;
+        }
+        #reservationStatus {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <button id="logoutButton">Logout</button>
+
+    <h1>Teacher Page</h1>
+
+    <!-- Reservation Status for Each Hour (8 am to 5 pm) -->
+    <div id="reservationStatus">
+        <h2>Reservation Status for Today</h2>
+        <table border="1">
+            <tr>
+                <th>Time Slot</th>
+                <th>name</th>
+                <th>gender</th>
+                <th>grade</th>
+            </tr>
+            <!-- Time slots from 8 am to 5 pm -->
+            <tr>
+                <td>8:00 AM - 9:00 AM</td>
+                <td class="name" data-time-slot="8:00 - 9:00"></td>
+                <td class="gender" data-time-slot="8:00 - 9:00"></td>
+                <td class="gradeLevel" data-time-slot="8:00 - 9:00"></td>
+            </tr>
+            <tr>
+                <td>9:00 AM - 10:00 AM</td>
+                <td class="name" data-time-slot="9:00 - 10:00"></td>
+                <td class="gender" data-time-slot="9:00 - 10:00"></td>
+                <td class="gradeLevel" data-time-slot="9:00 - 10:00"></td>
+            </tr>
+            <!-- Add more time slots as needed -->
+        </table>
+    </div>
+    <script src="../static/test.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>
