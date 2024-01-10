@@ -7,7 +7,7 @@ from rest_framework import status
 from .serializers import ReservationSerializer
 
 
-def index(request):
+def counsel_view(request):
     Reservations = Reservation.objects.all()
 
     return render(request, "index.html", {"Reservations": Reservations})

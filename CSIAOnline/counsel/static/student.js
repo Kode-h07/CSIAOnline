@@ -187,5 +187,5 @@ document
 
 // Add event listeners for login, delete reservation, and update reservation buttons
 document.getElementById("loginButton").addEventListener("click", () => {
-  window.location.href = "/login";
+  window.location.href = apiURL;
 });
