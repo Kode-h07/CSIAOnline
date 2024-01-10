@@ -15,6 +15,7 @@ document
     formData.forEach((value, key) => {
       formDataObject[key] = value;
     });
+    console.log(formDataObject)
 
     // Make a POST request to the server
     fetch(apiURL, {
