@@ -9,16 +9,15 @@ def login(request):
     if request.method == "POST":
         # Get data from the form
         data = json.loads(request.body.decode('utf-8'))
-        first_name = data.get("first_name")
-        last_name = data.get("last_name")
+        student_id = data.get("student_id")
         email = data.get("email")
-        color = data.get("color")
+        password = data.get("password")
         print(data)
 
         # Check if the student exists in the database
         try:
             student = Student.objects.get(
-                first_name=first_name, last_name=last_name, email=email, color=color
+                student_id=student_id, email=email, password=password
             )
             # Redirect to the home page if the student is found
             return JsonResponse({"status":"success"})

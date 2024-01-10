@@ -5,23 +5,25 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ReservationSerializer
+from django.core import serializers
 
 
 def counsel_view(request):
     Reservations = Reservation.objects.all()
+        
+
+    data = serializers.serialize("python", Reservation.objects.all())
+
+    context = {
+        'data': data, 
+    }
 
     return render(request, "index.html", {"Reservations": Reservations})
 
 
-@api_view(["GET", "PUT", "DELETE"])
+@api_view(["PUT", "DELETE"])
 def reservation_api(request):
-    if request.method == "GET":
-        # Logic for GET request
-        Reservations = Reservation.objects.all()
-        serializer = ReservationSerializer(Reservations, many=True)
-        return Response(serializer.data)
-
-    elif request.method == "PUT":
+    if request.method == "PUT":
         # Logic for PUT request
         time_slot = request.data.get("timeSlot")
         try:
@@ -87,3 +89,6 @@ def is_valid_teacher_credentials(teacher_name, teacher_password):
     # Replace this with your actual authentication logic
     # Example: Check against a database or another secure storage mechanism
     return teacher_name == "이수희" and teacher_password == "csiacounsel"
+
+
+

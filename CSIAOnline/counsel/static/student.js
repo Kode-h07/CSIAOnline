@@ -1,13 +1,8 @@
-let studentData = {};
 apiURL = "http://127.0.0.1:8000";
 
 // Function to delete a reservation and update the availability row
 async function deleteReservation(apiURL, timeSlot) {
   // Check if student data is available
-  if (Object.keys(studentData).length === 0) {
-    alert("Please log in first.");
-    return;
-  }
 
   // Prepare the data to send to the server (assuming you want to mark it as available)
   const reservationData = {
@@ -67,10 +62,6 @@ async function deleteReservation(apiURL, timeSlot) {
 // Define the makeReservation function
 async function makeReservation(apiURL, timeSlot) {
   // Check if student data is available
-  if (Object.keys(studentData).length === 0) {
-    alert("Please log in first.");
-    return;
-  }
 
   // Prepare the data to send to the server
   const reservationData = {

@@ -37,6 +37,7 @@ document
           // Redirect to the logout page
           window.location.href = apiURL + "/home";
         } else {
+          alert("Please check log in details")
           // Handle login failure (e.g., display an error message)
           console.error("Login failed:", data.message);
         }
