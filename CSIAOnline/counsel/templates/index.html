@@ -75,68 +75,53 @@
 </head>
 <body>
     {% extends "base.html" %}
-    <div class="wrapper">
-        <div class="box b">
-            <div id="loginContainer">
-                <h2>Student Login</h2>
-                <div class="d-grid gap-2 ">
-                    <button class="btn btn-primary" type="button" id="loginButton">Login</button>
-                </div>
-            </div>
-        
-            <div id="loginContainer">
-                <h2>Teacher Login</h2>
-                <div id="userInput">
-                    <label for="teacherName">Name:</label>
-                    <input type="text" id="teacherName" placeholder="Enter your name">
-                    <label for="teacherPassword">Password:</label>
-                    <input type="password" id="teacherPassword" placeholder="Enter your password">
-                    <div class="d-grid gap-2 ">
-                        <button class="btn btn-primary " type="button" id="teacherLoginButton">Login</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="box a">
-            <div id="reservationStatus">
-                {% block content %}
-                <h2>Reservation Status for Today</h2>
-                <table border="1" class="table table-striped table-hover">
-                    <tr>
-                        <th>Time Slot</th>
-                        <th>Status</th>
-                        <th>Make Reservation</th>
-                    </tr>
-                    {% for Reservation in Reservations %}
-                    <tr>
-                        <td>{{ Reservation.timeSlot }}</td>
-                        <td class="Availability" data-time-slot="{{ Reservation.time_slot }}">
-                            {% if Reservation.availability %}
-                                Available
-                            {% else %}
-                                Not Available
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if Reservation.availability %}
-                                <button class="MakeReserve" data-time-slot="{{ Reservation.time_slot }}" data-action="Make">Make Reservation</button>
-                                <button class="DeleteReserve" data-time-slot="{{ Reservation.time_slot }}" data-action="Delete" style="display:none">Delete Reservation</button>
-                            {% else %}
-                                <!-- Show a message or alternative content when not available -->
-                                Not Available
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% endblock %}
-            </div>
-        </div>
-        <div class="box c">
-            <h1>Special Event: .....</h1>
-        </div>
+    {% block content %}
+  <div class="wrapper">
+    <!-- ... (unchanged part) ... -->
+    <div class="box a">
+      <div id="reservationStatus">
+        <h2>Reservation Status for Today</h2>
+        <table border="1" class="table table-striped table-hover">
+          <tr>
+            <th>Time Slot</th>
+            <th>Status</th>
+            <th>Make Reservation</th>
+          </tr>
+          {% for Reservation in Reservations %}
+            <tr>
+              <td>{{ Reservation.timeSlot }} {{Reservation.student_id}}</td>
+              <td class="Availability" data-time-slot="{{ Reservation.time_slot }}">
+                {% if Reservation.student_id == current_student_id %}
+                  Not Available
+                {% else %}
+                  {% if Reservation.availability %}
+                    Available
+                  {% else %}
+                    Not Available
+                  {% endif %}
+                {% endif %}
+              </td>
+              <td>
+                {% if Reservation.student_id == current_student_id %}
+                  <button class="reservation-button" data-time-slot="{{ Reservation.time_slot }}" data-action="Delete">Delete Reservation</button>
+                {% else %}
+                  {% if Reservation.availability %}
+                    <button class="reservation-button" data-time-slot="{{ Reservation.time_slot }}" data-action="Make">Make Reservation</button>
+                  {% else %}
+                    <p1>Not Available</p1>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
     </div>
-    <script src="../static/student.js"></script>
+    <!-- ... (unchanged part) ... -->
+  </div>
+
+  <script src="../static/student.js"></script>
+{% endblock %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 </body>

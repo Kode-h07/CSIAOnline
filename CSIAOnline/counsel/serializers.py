@@ -5,4 +5,4 @@ from .models import Reservation
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = ["time_slot", "availability","student_id"]
+        fields = ["timeSlot", "availability","student_id"]

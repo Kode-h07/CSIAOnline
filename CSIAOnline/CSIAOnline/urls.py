@@ -8,3 +8,4 @@ urlpatterns = [
     path("", include("home.urls")),
     # Add other app paths as needed
 ]
+

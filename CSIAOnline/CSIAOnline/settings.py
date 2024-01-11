@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "home",
     "login",
     "counsel",
-    "rest_framework",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +128,21 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+AUTH_USER_MODEL = 'login.CustomUser'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # Add other authentication backends if needed
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',  # Optional: for browsable API
+        # Add other renderers as needed
+    ],
+    
+    # Other DRF settings...
+}

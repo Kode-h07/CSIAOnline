@@ -1,28 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Student
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login
+from .models import CustomUser
 import json
 
 @csrf_exempt
-def login(request):
+def custom_login(request):
     if request.method == "POST":
         # Get data from the form
         data = json.loads(request.body.decode('utf-8'))
         student_id = data.get("student_id")
         email = data.get("email")
         password = data.get("password")
-        print(data)
 
-        # Check if the student exists in the database
+        # Check if there is any matching object in the CustomUser table
         try:
-            student = Student.objects.get(
+            user = CustomUser.objects.get(
                 student_id=student_id, email=email, password=password
             )
-            # Redirect to the home page if the student is found
-            return JsonResponse({"status":"success"})
-        except Student.DoesNotExist:
-            # If the student is not found, return an error message
+            # Log in the user for the current session
+            login(request, user)
+            # Return a success response
+            return JsonResponse({"status": "success"})
+        except CustomUser.DoesNotExist:
+            # If no match is found, return an error message
             return JsonResponse(
                 {"error": "Invalid login credentials. Please check your inputs."},
                 status=400,
