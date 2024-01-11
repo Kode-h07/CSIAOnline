@@ -8,7 +8,7 @@ async function deleteReservation(timeSlot) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ timeSlot }),
+      body: JSON.stringify({timeSlot}),
     });
 
     if (!response.ok) {
@@ -70,16 +70,16 @@ function toggleReservationButtons(timeSlot, makeVisible) {
 }
 */
 // Add event listeners for "Make Reservation" and "Delete Reservation" buttons
-document.querySelectorAll('button[data-action="Make"]').forEach((makeButton) => {
-  makeButton.addEventListener("click", (event) => {
+document.querySelectorAll('.reservation-button').forEach((button) => {
+  button.addEventListener("click", (event) => {
     const timeSlot = event.target.getAttribute("data-time-slot");
-    makeReservation(timeSlot);
-  });
-});
+    const action = event.target.getAttribute("data-action");
+    console.log(timeSlot);
 
-document.querySelectorAll('button[data-action="Delete"]').forEach((deleteButton) => {
-  deleteButton.addEventListener("click", (event) => {
-    const timeSlot = event.target.getAttribute("data-time-slot");
-    deleteReservation(timeSlot);
+    if (action === "Make") {
+      makeReservation(timeSlot);
+    } else if (action === "Delete") {
+      deleteReservation(timeSlot);
+    }
   });
 });

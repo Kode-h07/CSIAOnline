@@ -90,7 +90,7 @@
           {% for Reservation in Reservations %}
             <tr>
               <td>{{ Reservation.timeSlot }} {{Reservation.student_id}}</td>
-              <td class="Availability" data-time-slot="{{ Reservation.time_slot }}">
+              <td class="Availability" data-time-slot="{{ Reservation.timeSlot }}">
                 {% if Reservation.student_id == current_student_id %}
                   Not Available
                 {% else %}
@@ -103,10 +103,10 @@
               </td>
               <td>
                 {% if Reservation.student_id == current_student_id %}
-                  <button class="reservation-button" data-time-slot="{{ Reservation.time_slot }}" data-action="Delete">Delete Reservation</button>
+                  <button class="reservation-button" data-time-slot="{{ Reservation.timeSlot }}" data-action="Delete">Delete Reservation</button>
                 {% else %}
                   {% if Reservation.availability %}
-                    <button class="reservation-button" data-time-slot="{{ Reservation.time_slot }}" data-action="Make">Make Reservation</button>
+                    <button class="reservation-button" data-time-slot="{{ Reservation.timeSlot }}" data-action="Make">Make Reservation</button>
                   {% else %}
                     <p1>Not Available</p1>
                   {% endif %}
