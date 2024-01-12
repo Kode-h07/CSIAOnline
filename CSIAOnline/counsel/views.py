@@ -47,7 +47,6 @@ def counsel_view(request):
         reservation.student_id = None
         reservation.save()
         serializer = ReservationSerializer(reservation)
-        serialized_data = serializer.data
         return JsonResponse(serializer.data, content_type="application/json")
 
     # Logic for rendering HTML page
