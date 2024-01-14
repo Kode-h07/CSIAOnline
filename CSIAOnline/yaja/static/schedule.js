@@ -1,18 +1,23 @@
-apiURL = "http://127.0.0.1:8000";
+const apiURL = "http://127.0.0.1:8000";
 
-function updateYaja() {
+function updateSchedule() {
   // Object to store selected values
-  let selectedValues = {
-    period1: getSelectedValue("period1"),
-    period2: getSelectedValue("period2"),
-    period3: getSelectedValue("period3"),
-  };
+  let selectedValues = {};
+
+  // Loop through each day and period to get selected values
+  ["Monday", "Tuesday", "Wednesday", "Thursday"].forEach((day) => {
+    selectedValues[day] = {};
+    for (let period_num = 1; period_num <= 3; period_num++) {
+      let periodId = `period${period_num}-${day}`;
+      selectedValues[day][`period${period_num}`] = getSelectedValue(periodId);
+    }
+  });
 
   console.log(selectedValues);
 
   // Make a PUT request to the backend API
-  fetch(apiURL + "/yaja/", {
-    method: "PUT",
+  fetch(apiURL + "/yaja/schedule", {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
@@ -25,11 +30,11 @@ function updateYaja() {
         alert("Successfully changed!");
         window.location.href = apiURL + "";
       } else {
-        console.error("Error in updateYaja: Unexpected response", data);
+        console.error("Error in updateSchedule: Unexpected response", data);
       }
     })
     .catch((error) => {
-      console.error("Error in updateYaja:", error);
+      console.error("Error in updateSchedule:", error);
     });
 }
 
@@ -49,18 +54,12 @@ function getSelectedValue(period) {
   return selectedValue;
 }
 
+// Attach the updateSchedule function to the form submission
 document
-  .getElementById("yajaForm")
+  .getElementById("scheduleForm")
   .addEventListener("submit", function (event) {
     event.preventDefault(); // Prevent the default form submission behavior
-    updateYaja();
-  });
-
-document
-  .getElementById("changeScheduleButton")
-  .addEventListener("click", function () {
-    // Replace "your_target_url" with the URL you want to redirect to
-    window.location.href = apiURL + "/yaja/schedule";
+    updateSchedule();
   });
 
 // Show/hide 'others' detail input based on selected value in dropdown
