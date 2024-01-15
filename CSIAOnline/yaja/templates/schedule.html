@@ -61,23 +61,33 @@
         <div class="right-half">
             <!-- Schedule Form -->
             <form id="scheduleForm">
-                <!-- Loop for 4 days and 3 periods each -->
                 {% for day in ["Monday", "Tuesday", "Wednesday", "Thursday"] %}
-                    {% for period_num in [1, 2, 3] %}
-                        <!-- Period {{ period_num }} for {{ day }} -->
-                        <label for="period{{ period_num }}-{{ day }}">Period {{ period_num }} ({{ day }}):</label>
-                        <select class="form-control form-control-lg" id="period{{ period_num }}-{{ day }}" name="period{{ period_num }}-{{ day }}">
-                            <option value="yaja">Yaja</option>
-                            <option value="dorm">Dorm</option>
-                            <option value="afterschool">After School</option>
-                            <option value="extraclass">Extra Class</option>
-                            <option value="others">Others</option>
-                        </select>
-                        <input type="text" id="period{{ period_num }}-{{ day }}-others-detail" name="period{{ period_num }}-{{ day }}-others-detail" style="display: none;">
-                        <br>
-                    {% endfor %}
+                    <label for="day">{{ day }}</label>
+                    <table class="form-table">
+                        <tr>
+                            <th>Period 1</th>
+                            <th>Period 2</th>
+                            <th>Period 3</th>
+                        </tr>
+                        <tr>
+                            {% for period_num in [1, 2, 3] %}
+                                <td>
+                                    <label for="period{{ period_num }}-{{ day }}">Period {{ period_num }}:</label>
+                                    <select class="form-control form-control-lg" id="period{{ period_num }}-{{ day }}" name="period{{ period_num }}-{{ day }}">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period{{ period_num }}-{{ day }}-others-detail" name="period{{ period_num }}-{{ day }}-others-detail" style="display: none;">
+                                    <br>
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
                 {% endfor %}
-
+                
                 <input type="submit" value="Submit">
             </form>
         </div>

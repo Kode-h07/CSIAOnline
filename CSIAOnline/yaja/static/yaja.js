@@ -56,13 +56,6 @@ document
     updateYaja();
   });
 
-document
-  .getElementById("changeScheduleButton")
-  .addEventListener("click", function () {
-    // Replace "your_target_url" with the URL you want to redirect to
-    window.location.href = apiURL + "/yaja/schedule";
-  });
-
 // Show/hide 'others' detail input based on selected value in dropdown
 document.querySelectorAll("select").forEach((dropdown) => {
   dropdown.addEventListener("change", function () {
@@ -76,3 +69,9 @@ document.querySelectorAll("select").forEach((dropdown) => {
     }
   });
 });
+document
+  .getElementById("changeScheduleButton")
+  .addEventListener("click", function () {
+    // Replace "your_target_url" with the URL you want to redirect to
+    window.location.href = apiURL + "/yaja/schedule";
+  });
