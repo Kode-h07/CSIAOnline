@@ -15,7 +15,8 @@ import pytz
 
 
 def get_schedule_model_for_current_day(student_id):
-    current_day = 0
+    current_day = datetime.now().weekday()
+    print(current_day)
     if current_day == 0:
         return Monday.objects.get(student_id=student_id)
     elif current_day == 1:
@@ -38,8 +39,7 @@ def yaja_view(request):
         period1 = data.get("period1")
         period2 = data.get("period2")
         period3 = data.get("period3")
-        #current_day = datetime.now().weekday()
-        current_day = 0
+        current_day = datetime.now().weekday()
 
         try:
             if current_day == 0:  # Monday
@@ -161,11 +161,6 @@ def yajaSchedule_view(request):
         thursday_schedule = Thursday.objects.get(student_id=current_student_id)
     except:
 
-        monday_schedule = None
-        tuesday_schedule = None
-        wednesday_schedule = None
-        thursday_schedule = None
-
         monday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         tuesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         wednesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
@@ -178,20 +173,10 @@ def yajaSchedule_view(request):
         request,
         "schedule.html",
 
-        {
-            "current_schedule": {
-                "monday": monday_schedule,
-                "tuesday": tuesday_schedule,
-                "wednesday": wednesday_schedule,
-                "thursday": thursday_schedule,
-            }
-        },
-
         {"schedule" :{
             "monday": monday_schedule,
             "tuesday": tuesday_schedule,
             "wednesday": wednesday_schedule,
             "thursday": thursday_schedule,
         }},
-
     )

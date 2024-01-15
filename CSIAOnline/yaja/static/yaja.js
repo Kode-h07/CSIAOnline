@@ -1,6 +1,7 @@
 apiURL = "http://127.0.0.1:8000";
 
 function updateYaja() {
+  console.log("YES")
   // Object to store selected values
   let selectedValues = {
     period1: getSelectedValue("period1"),
@@ -11,7 +12,7 @@ function updateYaja() {
   console.log(selectedValues);
 
   // Make a PUT request to the backend API
-  fetch(apiURL + "/yaja/", {
+  fetch(apiURL + "/yaja", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -49,12 +50,12 @@ function getSelectedValue(period) {
   return selectedValue;
 }
 
-document
-  .getElementById("yajaForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
-    updateYaja();
-  });
+document.getElementById("yajaForm").addEventListener("submit", function (event) {
+  // Prevent the default form submission behavior
+  console.log("form submitted")
+  event.preventDefault();
+  updateYaja();
+});
 
 // Show/hide 'others' detail input based on selected value in dropdown
 document.querySelectorAll("select").forEach((dropdown) => {
