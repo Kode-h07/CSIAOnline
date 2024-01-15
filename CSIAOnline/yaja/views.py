@@ -88,8 +88,10 @@ def yaja_view(request):
 
 @csrf_exempt
 def yajaSchedule_view(request):
+    current_student_id = request.user.student_id
     if request.method == "POST":
         data = json.loads(request.body)
+        print(data)
 
         monday = data.get("monday")
         tuesday = data.get("tuesday")
@@ -158,20 +160,38 @@ def yajaSchedule_view(request):
         wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
         thursday_schedule = Thursday.objects.get(student_id=current_student_id)
     except:
+
+        monday_schedule = None
+        tuesday_schedule = None
+        wednesday_schedule = None
+        thursday_schedule = None
+
         monday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         tuesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         wednesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         thursday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
         
+
     # 만약 이미 있는거 부분수정하고 싶은거면 현재거를 보여지는 폼 디폴트로 설정할 수있나?
     # 아님 걍 하라 그러고
     return render(
         request,
         "schedule.html",
+
+        {
+            "current_schedule": {
+                "monday": monday_schedule,
+                "tuesday": tuesday_schedule,
+                "wednesday": wednesday_schedule,
+                "thursday": thursday_schedule,
+            }
+        },
+
         {"schedule" :{
             "monday": monday_schedule,
             "tuesday": tuesday_schedule,
             "wednesday": wednesday_schedule,
             "thursday": thursday_schedule,
         }},
+
     )
