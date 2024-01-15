@@ -9,14 +9,28 @@ from .serializers import (
     WednesdaySerializer,
     ThursdaySerializer,
 )
+from datetime import datetime
 import json
-from django.utils import timezone
 import pytz
-import datetime
 
+
+def get_schedule_model_for_current_day(student_id):
+    current_day = 0
+    if current_day == 0:
+        return Monday.objects.get(student_id=student_id)
+    elif current_day == 1:
+        return Tuesday.objects.get(student_id=student_id)
+    elif current_day == 2:
+        return Wednesday.objects.get(student_id=student_id)
+    elif current_day == 3:
+        return Thursday.objects.get(student_id=student_id)
+    else:
+        raise ValueError("Unsupported day") 
 
 @csrf_exempt
 def yaja_view(request):
+    current_student_id = request.user.student_id
+    currentDay_schedule = get_schedule_model_for_current_day(current_student_id)
     if request.method == "PUT":
         # if 시간을 통해서 무슨 요일인지
         data = json.loads(request.body)
@@ -24,24 +38,52 @@ def yaja_view(request):
         period1 = data.get("period1")
         period2 = data.get("period2")
         period3 = data.get("period3")
-        current_student_id = request.user.student_id
-        try:
-            schedule = Monday.objects.get(student_id=current_student_id)
-            print(schedule)
-        except Monday.DoesNotExist:
-            print("not existing shit")
-            return JsonResponse({"error": "No schedule set"})
-        schedule.period1 = period1
-        schedule.period2 = period2
-        schedule.period3 = period3
-        schedule.save()
-        serializer = MondaySerializer(schedule)
-        return JsonResponse(serializer.data, content_type="application/json")
+        #current_day = datetime.now().weekday()
+        current_day = 0
 
-    Monday_schedule = Monday.objects.get(student_id=request.user.student_id)
-    # current_day = get_day_of_week()  # Get the current day of the week
-    # print(current_day)
-    return render(request, "yaja.html", {"Yaja": Monday_schedule})
+        try:
+            if current_day == 0:  # Monday
+                schedule = Monday.objects.get(student_id=current_student_id)
+                serializer = MondaySerializer(schedule)
+                currentDay_schedule = Monday.objects.get(student_id=request.user.student_id)
+
+            elif current_day == 1:
+                schedule = Tuesday.objects.get(student_id=current_student_id)
+                serializer = TuesdaySerializer(schedule)
+                currentDay_schedule = Tuesday.objects.get(student_id=request.user.student_id)
+
+            elif current_day == 2:
+                schedule = Wednesday.objects.get(student_id=current_student_id)
+                serializer = WednesdaySerializer(schedule)
+                currentDay_schedule = Wednesday.objects.get(student_id=request.user.student_id)
+
+            elif current_day == 3:
+                schedule = Thursday.objects.get(student_id=current_student_id)
+                serializer = ThursdaySerializer(schedule)
+                currentDay_schedule = Thursday.objects.get(student_id=request.user.student_id)
+
+            else:
+                return JsonResponse({"error": "Unsupported day"})
+            
+            currentDay_schedule.period1 = period1
+            currentDay_schedule.period2 = period2
+            currentDay_schedule.period3 = period3
+            currentDay_schedule.save()
+            return JsonResponse(serializer.data, content_type="application/json")
+        
+        except Monday.DoesNotExist:
+            return JsonResponse({"error": "No schedule set for Monday"})
+
+        except Tuesday.DoesNotExist:
+            return JsonResponse({"error": "No schedule set for Tuesday"})
+
+        except Wednesday.DoesNotExist:
+            return JsonResponse({"error": "No schedule set for Wednesday"})
+
+        except Thursday.DoesNotExist:
+            return JsonResponse({"error": "No schedule set for Thursday"})
+        
+    return render(request, "yaja.html", {"Yaja": currentDay_schedule})
 
 
 @csrf_exempt
@@ -110,39 +152,26 @@ def yajaSchedule_view(request):
         }
 
         return JsonResponse(response_data, content_type="application/json")
-
-    monday_schedule = Monday.objects.get(student_id=current_student_id)
-    tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
-    wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
-    thursday_schedule = Thursday.objects.get(student_id=current_student_id)
+    try:
+        monday_schedule = Monday.objects.get(student_id=current_student_id)
+        tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
+        wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
+        thursday_schedule = Thursday.objects.get(student_id=current_student_id)
+    except:
+        monday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
+        tuesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
+        wednesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
+        thursday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
+        
     # 만약 이미 있는거 부분수정하고 싶은거면 현재거를 보여지는 폼 디폴트로 설정할 수있나?
     # 아님 걍 하라 그러고
     return render(
         request,
-        "yaja.html",
-        {
+        "schedule.html",
+        {"schedule" :{
             "monday": monday_schedule,
             "tuesday": tuesday_schedule,
             "wednesday": wednesday_schedule,
             "thursday": thursday_schedule,
-        },
+        }},
     )
-
-
-# def get_day_of_week():
-
-#     korea_timezone = pytz.timezone('America/Mexico_City')
-#     current_datetime = datetime.datetime.now(korea_timezone)
-#     # Get the current date and time in the UTC timezone
-#     current_datetime = pytz.timezone.now()
-
-#     # Get the day of the week as an integer (Monday is 0, Sunday is 6)
-#     day_of_week_int = current_datetime.weekday()
-
-#     # Map the integer to the corresponding day name
-#     days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-#     day_of_week_name = days_of_week[day_of_week_int]
-
-#     return f"The current day of the week is: {day_of_week_name}"
-
-# Call the function and print the result

@@ -47,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for day, periods in current_schedule.items() %}
+                    {% for day, periods in schedule %}
                         <tr>
                             <td>{{ day }}</td>
                             {% for period in periods %}
