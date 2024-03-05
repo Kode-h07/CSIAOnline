@@ -1,4 +1,3 @@
-// Add an event listener for the form submission
 apiURL = "http://127.0.0.1:8000";
 
 document
@@ -15,7 +14,7 @@ document
     formData.forEach((value, key) => {
       formDataObject[key] = value;
     });
-    console.log(formDataObject)
+    console.log(formDataObject);
 
     // Make a POST request to the server
     fetch(apiURL, {
@@ -37,7 +36,7 @@ document
           // Redirect to the logout page
           window.location.href = apiURL + "/home";
         } else {
-          alert("Please check log in details")
+          alert("Please check log in details");
           // Handle login failure (e.g., display an error message)
           console.error("Login failed:", data.message);
         }
