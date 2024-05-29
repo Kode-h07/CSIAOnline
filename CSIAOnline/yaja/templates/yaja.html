@@ -9,14 +9,18 @@
     <style>
         .container {
             display: flex;
+            flex-wrap: wrap;
         }
 
-        .left-half {
-            width: 50%;
+        .left-half, .right-half {
+            width: 100%;
+            padding: 20px;
         }
 
-        .right-half {
-            width: 50%;
+        @media (min-width: 768px) {
+            .left-half, .right-half {
+                width: 50%;
+            }
         }
     </style>
 </head>
@@ -26,58 +30,266 @@
     <div class="container">
         <div class="left-half">
             <!-- Display context from the backend -->
-            {{ Yaja.period1 }} <br>
-            {{ Yaja.period2 }} <br>
-            {{ Yaja.period3 }} <br>
-        </div>
-        <div>
-            <button id="changeScheduleButton" href = "http://127.0.0.1:8000/yaja/schedule">Change entire schedule</button>
+            <p>{{ Yaja.period1 }}</p>
+            <p>{{ Yaja.period2 }}</p>
+            <p>{{ Yaja.period3 }}</p>
         </div>
         <div class="right-half">
             <form id="yajaForm">
                 <!-- Period 1 -->
                 <label for="period1">Period 1:</label>
-                <select class="form-control form-control-lg" id="period1" name="period1">
+                <select class="form-control form-control-lg" id="period1" onchange="toggleOtherDetail('period1')">
                     <option value="yaja">Yaja</option>
                     <option value="dorm">Dorm</option>
                     <option value="afterschool">After School</option>
                     <option value="extraclass">Extra Class</option>
                     <option value="others">Others</option>
                 </select>
-                <input type="text" id="period1-others-detail" name="period1-others-detail" style="display: none;">
+                <input type="text" id="period1-others-detail" style="display: none;" class="form-control mt-2">
                 <br>
 
                 <!-- Period 2 -->
                 <label for="period2">Period 2:</label>
-                <select class="form-control form-control-lg" id="period2" name="period2">
+                <select class="form-control form-control-lg" id="period2" onchange="toggleOtherDetail('period2')">
                     <option value="yaja">Yaja</option>
                     <option value="dorm">Dorm</option>
                     <option value="afterschool">After School</option>
                     <option value="extraclass">Extra Class</option>
                     <option value="others">Others</option>
                 </select>
-                <input type="text" id="period2-others-detail" name="period2-others-detail" style="display: none;">
+                <input type="text" id="period2-others-detail" style="display: none;" class="form-control mt-2">
                 <br>
 
                 <!-- Period 3 -->
                 <label for="period3">Period 3:</label>
-                <select class="form-control form-control-lg" id="period3" name="period3">
+                <select class="form-control form-control-lg" id="period3" onchange="toggleOtherDetail('period3')">
                     <option value="yaja">Yaja</option>
                     <option value="dorm">Dorm</option>
                     <option value="afterschool">After School</option>
                     <option value="extraclass">Extra Class</option>
                     <option value="others">Others</option>
                 </select>
-                <input type="text" id="period3-others-detail" name="period3-others-detail" style="display: none;">
+                <input type="text" id="period3-others-detail" style="display: none;" class="form-control mt-2">
                 <br>
 
-                <input type="submit" class="form-control btn btn-primary" value="Submit" name="submit">
+                <input type="submit" class="form-control btn btn-primary" value="Submit">
             </form>
         </div>
     </div>
-    {% endblock %}
 
-    <script src="../static/yaja.js"></script>
+    <!-- Modal -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#defaultsetmodal">
+        Set new Default
+    </button>
+    <div class="modal fade" id="defaultsetmodal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scheduleModalLabel">Change Entire Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="scheduleForm">
+                        <!-- Monday -->
+                        <label for="Monday">Monday</label>
+                        <table class="table">
+                            <tr>
+                                <th>Period 1</th>
+                                <th>Period 2</th>
+                                <th>Period 3</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="period1-Monday">Period 1:</label>
+                                    <select class="form-control form-control-lg" id="period1-Monday" onchange="toggleOtherDetail('period1-Monday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period1-Monday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period2-Monday">Period 2:</label>
+                                    <select class="form-control form-control-lg" id="period2-Monday" onchange="toggleOtherDetail('period2-Monday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period2-Monday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period3-Monday">Period 3:</label>
+                                    <select class="form-control form-control-lg" id="period3-Monday" onchange="toggleOtherDetail('period3-Monday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period3-Monday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- Repeat similar structure for Tuesday, Wednesday, Thursday, Friday -->
+                        <!-- For brevity, I will show Tuesday only. Repeat for other days -->
+
+                        <label for="Tuesday">Tuesday</label>
+                        <table class="table">
+                            <tr>
+                                <th>Period 1</th>
+                                <th>Period 2</th>
+                                <th>Period 3</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="period1-Tuesday">Period 1:</label>
+                                    <select class="form-control form-control-lg" id="period1-Tuesday" onchange="toggleOtherDetail('period1-Tuesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period1-Tuesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period2-Tuesday">Period 2:</label>
+                                    <select class="form-control form-control-lg" id="period2-Tuesday" onchange="toggleOtherDetail('period2-Tuesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period2-Tuesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period3-Tuesday">Period 3:</label>
+                                    <select class="form-control form-control-lg" id="period3-Tuesday" onchange="toggleOtherDetail('period3-Tuesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period3-Tuesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <label for="Tuesday">Wednesday</label>
+                        <table class="table">
+                            <tr>
+                                <th>Period 1</th>
+                                <th>Period 2</th>
+                                <th>Period 3</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="period1-Wednesday">Period 1:</label>
+                                    <select class="form-control form-control-lg" id="period1-Wednesday" onchange="toggleOtherDetail('period1-Wednesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period1-Wednesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period2-Wednesday">Period 2:</label>
+                                    <select class="form-control form-control-lg" id="period2-Wednesday" onchange="toggleOtherDetail('period2-Wednesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period2-Wednesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period3-Wednesday">Period 3:</label>
+                                    <select class="form-control form-control-lg" id="period3-Wednesday" onchange="toggleOtherDetail('period3-Wednesday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period3-Wednesday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                            </tr>
+                        </table>
+
+                        <label for="Tuesday">Thursday</label>
+                        <table class="table">
+                            <tr>
+                                <th>Period 1</th>
+                                <th>Period 2</th>
+                                <th>Period 3</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="period1-Thursday">Period 1:</label>
+                                    <select class="form-control form-control-lg" id="period1-Thursday" onchange="toggleOtherDetail('period1-Thursday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period1-Thursday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period2-Thursday">Period 2:</label>
+                                    <select class="form-control form-control-lg" id="period2-Thursday" onchange="toggleOtherDetail('period2-Thursday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period2-Thursday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                                <td>
+                                    <label for="period3-Thursday">Period 3:</label>
+                                    <select class="form-control form-control-lg" id="period3-Thursday" onchange="toggleOtherDetail('period3-Thursday')">
+                                        <option value="yaja">Yaja</option>
+                                        <option value="dorm">Dorm</option>
+                                        <option value="afterschool">After School</option>
+                                        <option value="extraclass">Extra Class</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                    <input type="text" id="period3-Thursday-others-detail" style="display: none;" class="form-control mt-2">
+                                </td>
+                            </tr>
+                        </table>
+
+                    
+                        <input type="submit" class="btn btn-primary" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    <script>
+        function toggleOtherDetail(period) {
+            const selectElement = document.getElementById(period);
+            const otherDetailInput = document.getElementById(`${period}-others-detail`);
+            if (selectElement.value === "others") {
+                otherDetailInput.style.display = "block";
+            } else {
+                otherDetailInput.style.display = "none";
+            }
+        }
+    </script>
+    <script src="../static/schedule.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

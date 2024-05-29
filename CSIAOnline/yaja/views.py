@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+import json
 from .models import Monday, Tuesday, Wednesday, Thursday
 from .serializers import (
     MondaySerializer,
@@ -10,8 +11,6 @@ from .serializers import (
     ThursdaySerializer,
 )
 from datetime import datetime
-import json
-import pytz
 
 
 def get_schedule_model_for_current_day(student_id):
@@ -26,12 +25,25 @@ def get_schedule_model_for_current_day(student_id):
     elif current_day == 3:
         return Thursday.objects.get(student_id=student_id)
     else:
-        raise ValueError("Unsupported day") 
+        raise ValueError("Unsupported day")
+
 
 @csrf_exempt
 def yaja_view(request):
     current_student_id = request.user.student_id
-    currentDay_schedule = get_schedule_model_for_current_day(current_student_id)
+    try:
+        # Try to get existing records
+        monday_schedule = Monday.objects.get(student_id=current_student_id)
+        tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
+        wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
+        thursday_schedule = Thursday.objects.get(student_id=current_student_id)
+    except:
+        # Create new records if they don't exist
+        monday_schedule = Monday.objects.create(student_id=current_student_id)
+        tuesday_schedule = Tuesday.objects.create(student_id=current_student_id)
+        wednesday_schedule = Wednesday.objects.create(student_id=current_student_id)
+        thursday_schedule = Thursday.objects.create(student_id=current_student_id)
+    schedule = get_schedule_model_for_current_day(current_student_id)
     if request.method == "PUT":
         # if 시간을 통해서 무슨 요일인지
         data = json.loads(request.body)
@@ -45,32 +57,28 @@ def yaja_view(request):
             if current_day == 0:  # Monday
                 schedule = Monday.objects.get(student_id=current_student_id)
                 serializer = MondaySerializer(schedule)
-                currentDay_schedule = Monday.objects.get(student_id=request.user.student_id)
 
             elif current_day == 1:
                 schedule = Tuesday.objects.get(student_id=current_student_id)
                 serializer = TuesdaySerializer(schedule)
-                currentDay_schedule = Tuesday.objects.get(student_id=request.user.student_id)
 
             elif current_day == 2:
                 schedule = Wednesday.objects.get(student_id=current_student_id)
                 serializer = WednesdaySerializer(schedule)
-                currentDay_schedule = Wednesday.objects.get(student_id=request.user.student_id)
 
             elif current_day == 3:
                 schedule = Thursday.objects.get(student_id=current_student_id)
                 serializer = ThursdaySerializer(schedule)
-                currentDay_schedule = Thursday.objects.get(student_id=request.user.student_id)
 
             else:
                 return JsonResponse({"error": "Unsupported day"})
-            
-            currentDay_schedule.period1 = period1
-            currentDay_schedule.period2 = period2
-            currentDay_schedule.period3 = period3
-            currentDay_schedule.save()
+
+            schedule.period1 = period1
+            schedule.period2 = period2
+            schedule.period3 = period3
+            schedule.save()
             return JsonResponse(serializer.data, content_type="application/json")
-        
+
         except Monday.DoesNotExist:
             return JsonResponse({"error": "No schedule set for Monday"})
 
@@ -82,23 +90,45 @@ def yaja_view(request):
 
         except Thursday.DoesNotExist:
             return JsonResponse({"error": "No schedule set for Thursday"})
-        
-    return render(request, "yaja.html", {"Yaja": currentDay_schedule})
 
-
-@csrf_exempt
-def yajaSchedule_view(request):
-    current_student_id = request.user.student_id
-    if request.method == "POST":
+    elif request.method == "POST":
         data = json.loads(request.body)
         print(data)
+        # retrieve data from model to change modal default
+        try:
+            monday_schedule = Monday.objects.get(student_id=current_student_id)
+            tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
+            wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
+            thursday_schedule = Thursday.objects.get(student_id=current_student_id)
+        except:
 
+            monday_schedule = {"period1": "None", "period2": "None", "period3": "None"}
+            tuesday_schedule = {"period1": "None", "period2": "None", "period3": "None"}
+            wednesday_schedule = {
+                "period1": "None",
+                "period2": "None",
+                "period3": "None",
+            }
+            thursday_schedule = {
+                "period1": "None",
+                "period2": "None",
+                "period3": "None",
+            }
+
+        response_data = {
+            "Monday": monday_schedule,
+            "Tuesday": tuesday_schedule,
+            "Wednesday": wednesday_schedule,
+            "Thursday": thursday_schedule,
+            "action": "setdefault",
+        }
+        JsonResponse(response_data, content_type="application/json")
+
+        # get selected values from modal
         monday = data.get("monday")
         tuesday = data.get("tuesday")
         wednesday = data.get("wednesday")
         thursday = data.get("thursday")
-
-        current_student_id = request.user.student_id
 
         try:
             # Try to get existing records
@@ -145,38 +175,17 @@ def yajaSchedule_view(request):
         serializer_thursday = ThursdaySerializer(thursday_schedule)
 
         # Combine the serialized data into a response
-        response_data = {
+        echo_data = {
             "monday": serializer_monday.data,
             "tuesday": serializer_tuesday.data,
             "wednesday": serializer_wednesday.data,
             "thursday": serializer_thursday.data,
             "status": "success",
+            "action": "echo",
         }
 
-        return JsonResponse(response_data, content_type="application/json")
-    try:
-        monday_schedule = Monday.objects.get(student_id=current_student_id)
-        tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
-        wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
-        thursday_schedule = Thursday.objects.get(student_id=current_student_id)
-    except:
+        return JsonResponse(echo_data, content_type="application/json")
 
-        monday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
-        tuesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
-        wednesday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
-        thursday_schedule = {"period1":"None", "period2":"None", "period3":"None"}
-        
-
-    # 만약 이미 있는거 부분수정하고 싶은거면 현재거를 보여지는 폼 디폴트로 설정할 수있나?
-    # 아님 걍 하라 그러고
-    return render(
-        request,
-        "schedule.html",
-
-        {"schedule" :{
-            "monday": monday_schedule,
-            "tuesday": tuesday_schedule,
-            "wednesday": wednesday_schedule,
-            "thursday": thursday_schedule,
-        }},
-    )
+        # 만약 이미 있는거 부분수정하고 싶은거면 현재거를 보여지는 폼 디폴트로 설정할 수있나?
+        # 아님 걍 하라 그러고
+    return render(request, "yaja.html", {"Yaja": schedule})
