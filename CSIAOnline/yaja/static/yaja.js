@@ -1,5 +1,8 @@
 // Function to update the entire schedule
 // Function to get the selected value of a dropdown
+
+apiURL = "http://127.0.0.1:8000/yaja/";
+
 function getSelectedValue(dropdownId) {
   let dropdown = document.getElementById(dropdownId);
   let selectedValue = dropdown.options[dropdown.selectedIndex].value;
@@ -15,8 +18,8 @@ function getSelectedValue(dropdownId) {
   }
 }
 
-function updateEntireSchedule(form) {
-  // Retrieve selected values from the form
+function updateEntireSchedule() {
+  // Retrieve selected values from the
   let selectedValues = {};
 
   // Loop through each day and period to get selected values
@@ -31,7 +34,7 @@ function updateEntireSchedule(form) {
   console.log(selectedValues);
 
   // Make the request to the backend API to update the entire schedule
-  fetch(form.getAttribute("action"), {
+  fetch(apiURL, {
     method: "POST", // Assuming it's always a POST request for updating the entire schedule
     headers: {
       "Content-Type": "application/json",
@@ -40,16 +43,7 @@ function updateEntireSchedule(form) {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.action === "setdefault") {
-        ["Monday", "Tuesday", "Wednesday", "Thursday"].forEach((day) => {
-          selectedValues[day] = {};
-          for (let period_num = 1; period_num <= 3; period_num++) {
-            let periodId = `period${period_num}-${day}`;
-            document.getElementById(periodId).value = data.day.period_num;
-          }
-        });
-      }
-      if (data.action === "echo" && data.status === "success") {
+      if (data.status === "echo") {
         alert("Successfully changed entire schedule!");
         window.location.reload(); // Reload the page after successful update
       } else {
@@ -64,9 +58,36 @@ function updateEntireSchedule(form) {
     });
 }
 
+function retreiveSchedule() {
+  req = { action: "retrieve" };
+  fetch(apiURL, {
+    method: "GET", // Assuming it's always a POST request for updating the entire schedule
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(req),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.action === "retrieve") {
+        ["Monday", "Tuesday", "Wednesday", "Thursday"].forEach((day) => {
+          for (let period_num = 1; period_num <= 3; period_num++) {
+            let periodId = `period${period_num}-${day}`;
+            document.getElementById(periodId).value = data.day.period_num;
+          }
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error in updateEntireSchedule:", error);
+    });
+}
+
 // Function to update today's schedule
-function updateTodaysSchedule(form) {
-  // Retrieve selected values from the form
+function updateTodaySchedule() {
+  // Retrieve selected values from the
+  console.log("success in front");
   let selectedValues = {};
 
   // Loop through periods 1, 2, and 3 to get selected values
@@ -78,7 +99,7 @@ function updateTodaysSchedule(form) {
   console.log(selectedValues);
 
   // Make the request to the backend API to update today's schedule
-  fetch(form.getAttribute("action"), {
+  fetch(apiURL, {
     method: "PUT", // Assuming it's always a PUT request for updating today's schedule
     headers: {
       "Content-Type": "application/json",
@@ -87,48 +108,63 @@ function updateTodaysSchedule(form) {
   })
     .then((response) => response.json())
     .then((data) => {
-      if (data.status === "success") {
+      console.log(data);
+      console.log("got response");
+      if (data.status == "success") {
         alert("Successfully changed today's schedule!");
-        window.location.reload(); // Reload the page after successful update
+        window.location.href("http://127.0.0.1:8000"); // Reload the page after successful update
       } else {
         console.error(
-          "Error in updateTodaysSchedule: Unexpected response",
+          "Error in updateTodaySchedule: Unexpected response",
           data
         );
       }
     })
     .catch((error) => {
-      console.error("Error in updateTodaysSchedule:", error);
+      console.error("Error in updateTodaySchedule:", error);
     });
 }
 
-// Attach event listeners to the forms based on their IDs or other attributes
-document.querySelectorAll("form").forEach((form) => {
-  if (form.id === "scheduleForm") {
-    // If it's the form for updating the entire schedule
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent the default form submission behavior
-      updateEntireSchedule(form);
-    });
-  } else if (form.id === "todaysScheduleForm") {
-    // If it's the form for updating today's schedule
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent the default form submission behavior
-      updateTodaysSchedule(form);
-    });
-  }
-});
+// Attach event listeners to the s based on their IDs or other attributes
 
-// Show/hide 'others' detail input based on selected value in dropdown
-document.querySelectorAll("select").forEach((dropdown) => {
-  dropdown.addEventListener("change", function () {
-    let period = this.id;
-    let othersDetailInput = document.getElementById(`${period}-others-detail`);
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("loaded");
+  // Attach change event listener to all select elements
+  document.querySelectorAll("select").forEach((dropdown) => {
+    dropdown.addEventListener("change", function () {
+      let period = this.id;
+      let othersDetailInput = document.getElementById(
+        `${period}-others-detail`
+      );
 
-    if (this.value === "others") {
-      othersDetailInput.style.display = "block";
-    } else {
-      othersDetailInput.style.display = "none";
-    }
+      if (this.value === "others") {
+        othersDetailInput.style.display = "block";
+      } else {
+        othersDetailInput.style.display = "none";
+      }
+    });
   });
+  document
+    .getElementById("yaja_Form")
+    .addEventListener("submit", function (event) {
+      console.log("clickeeed");
+      event.preventDefault();
+      updateTodaySchedule();
+    });
+
+  document
+    .getElementById("scheduleForm")
+    .addEventListener("submit", function (event) {
+      console.log("clickeeed");
+      event.preventDefault();
+      updateEntireSchedule();
+    });
+
+  document
+    .getElementById("modalpop")
+    .addEventListener("submit", function (event) {
+      console.log("clickeeed");
+      event.preventDefault();
+      retreiveSchedule();
+    });
 });
