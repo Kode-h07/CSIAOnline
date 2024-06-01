@@ -52,4 +52,4 @@ def counsel_view(request):
     # Logic for rendering HTML page
     Reservations = Reservation.objects.all()
     print(request.user.student_id)
-    return render(request, "index.html", {"Reservations": Reservations, "current_student_id": request.user.student_id})
+    return render(request, "extendingbase.html", {"Reservations": Reservations, "current_student_id": request.user.student_id})
