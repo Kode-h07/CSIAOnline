@@ -3,14 +3,28 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
-from .models import Monday, Tuesday, Wednesday, Thursday
+from .models import (
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    DefaultMonday,
+    DefaultTuesday,
+    DefaultWednesday,
+    DefaultThursday,
+)
 from .serializers import (
     MondaySerializer,
     TuesdaySerializer,
     WednesdaySerializer,
     ThursdaySerializer,
+    DefaultMondaySerializer,
+    DefaultTuesdaySerializer,
+    DefaultWednesdaySerializer,
+    DefaultThursdaySerializer,
 )
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
 
 def get_schedule_model_for_current_day(student_id):
@@ -27,10 +41,11 @@ def get_schedule_model_for_current_day(student_id):
         ):
             return Monday.objects.get(student_id=student_id)
     except:
-        return
+        return None
 
 
 @csrf_exempt
+@login_required
 def yaja_view(request):
     current_student_id = request.user.student_id
     schedule = get_schedule_model_for_current_day(current_student_id)
@@ -38,30 +53,28 @@ def yaja_view(request):
         print(current_student_id)
 
         # Try to get existing Monday record
-        try:
-            monday_schedule = Monday.objects.get(student_id=current_student_id)
-        except Monday.DoesNotExist:
-            monday_schedule = Monday.objects.create(student_id=current_student_id)
+        monday_schedule, created = Monday.objects.get_or_create(
+            student_id=current_student_id
+        )
+        if created:
             print("created monday obj")
 
-        # Try to get existing Tuesday record
-        try:
-            tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
-        except Tuesday.DoesNotExist:
-            tuesday_schedule = Tuesday.objects.create(student_id=current_student_id)
+        tuesday_schedule, created = Tuesday.objects.get_or_create(
+            student_id=current_student_id
+        )
+        if created:
             print("created tuesday obj")
 
-        # Try to get existing Wednesday record
-        try:
-            wednesday_schedule = Wednesday.objects.get(student_id=current_student_id)
-        except Wednesday.DoesNotExist:
-            wednesday_schedule = Wednesday.objects.create(student_id=current_student_id)
+        wednesday_schedule, created = Wednesday.objects.get_or_create(
+            student_id=current_student_id
+        )
+        if created:
             print("created weds obj")
-        # Try to get existing Thursday record
-        try:
-            thursday_schedule = Thursday.objects.get(student_id=current_student_id)
-        except Thursday.DoesNotExist:
-            thursday_schedule = Thursday.objects.create(student_id=current_student_id)
+
+        thursday_schedule, created = Thursday.objects.get_or_create(
+            student_id=current_student_id
+        )
+        if created:
             print("created thursday obj")
 
     except Exception as e:
@@ -125,52 +138,65 @@ def yaja_view(request):
             wednesday = data.get("Wednesday")
             thursday = data.get("Thursday")
 
+            default_monday, created = DefaultMonday.objects.get_or_create(
+                user=request.user
+            )
+            default_tuesday, created = DefaultTuesday.objects.get_or_create(
+                user=request.user
+            )
+            default_wednesday, created = DefaultWednesday.objects.get_or_create(
+                user=request.user
+            )
+            default_thursday, created = DefaultThursday.objects.get_or_create(
+                user=request.user
+            )
+
             # Update the period data
-            monday_schedule.period1 = monday.get("period1")
-            tuesday_schedule.period1 = tuesday.get("period1")
-            wednesday_schedule.period1 = wednesday.get("period1")
-            thursday_schedule.period1 = thursday.get("period1")
-            monday_schedule.period2 = monday.get("period2")
-            tuesday_schedule.period2 = tuesday.get("period2")
-            wednesday_schedule.period2 = wednesday.get("period2")
-            thursday_schedule.period2 = thursday.get("period2")
-            monday_schedule.period3 = monday.get("period3")
-            tuesday_schedule.period3 = tuesday.get("period3")
-            wednesday_schedule.period3 = wednesday.get("period3")
-            thursday_schedule.period3 = thursday.get("period3")
+            default_monday.period1 = monday.get("period1")
+            default_monday.period2 = monday.get("period2")
+            default_monday.period3 = monday.get("period3")
+            default_tuesday.period1 = tuesday.get("period1")
+            default_tuesday.period2 = tuesday.get("period2")
+            default_tuesday.period3 = tuesday.get("period3")
+            default_wednesday.period1 = wednesday.get("period1")
+            default_wednesday.period2 = wednesday.get("period2")
+            default_wednesday.period3 = wednesday.get("period3")
+            default_thursday.period1 = thursday.get("period1")
+            default_thursday.period2 = thursday.get("period2")
+            default_thursday.period3 = thursday.get("period3")
             mon = {
-                "period1": monday.get("period1"),
-                "period2": monday.get("period2"),
-                "period3": monday.get("period3"),
+                "period1": default_monday.get("period1"),
+                "period2": default_monday.get("period2"),
+                "period3": default_monday.get("period3"),
             }
             tue = {
-                "period1": tuesday.get("period1"),
-                "period2": tuesday.get("period2"),
-                "period3": tuesday.get("period3"),
+                "period1": default_tuesday.get("period1"),
+                "period2": default_tuesday.get("period2"),
+                "period3": default_tuesday.get("period3"),
             }
             wed = {
-                "period1": wednesday.get("period1"),
-                "period2": wednesday.get("period2"),
-                "period3": wednesday.get("period3"),
+                "period1": default_wednesday.get("period1"),
+                "period2": default_wednesday.get("period2"),
+                "period3": default_wednesday.get("period3"),
             }
             thur = {
-                "period1": thursday.get("period1"),
-                "period2": thursday.get("period2"),
-                "period3": thursday.get("period3"),
+                "period1": default_thursday.get("period1"),
+                "period2": default_thursday.get("period2"),
+                "period3": default_thursday.get("period3"),
             }
 
             # Save the changes
-            Monday_serializer = MondaySerializer(
-                monday_schedule, data=mon, partial=True
+            Monday_serializer = DefaultMondaySerializer(
+                default_monday, data=mon, partial=True
             )
-            Tuesday_serializer = TuesdaySerializer(
-                tuesday_schedule, data=tue, partial=True
+            Tuesday_serializer = DefaultTuesdaySerializer(
+                default_tuesday, data=tue, partial=True
             )
-            Wednesday_serializer = WednesdaySerializer(
-                wednesday_schedule, data=wed, partial=True
+            Wednesday_serializer = DefaultWednesdaySerializer(
+                default_wednesday, data=wed, partial=True
             )
-            Thursday_serializer = ThursdaySerializer(
-                thursday_schedule, data=thur, partial=True
+            Thursday_serializer = DefaultThursdaySerializer(
+                default_thursday, data=thur, partial=True
             )
             if (
                 Monday_serializer.is_valid()
@@ -184,10 +210,10 @@ def yaja_view(request):
                 Thursday_serializer.save()
                 return JsonResponse({"status": "echo"}, status=200)
         except (
-            Monday.DoesNotExist,
-            Tuesday.DoesNotExist,
-            Wednesday.DoesNotExist,
-            Thursday.DoesNotExist,
+            DefaultMonday.DoesNotExist,
+            DefaultTuesday.DoesNotExist,
+            DefaultWednesday.DoesNotExist,
+            DefaultThursday.DoesNotExist,
         ):
             return JsonResponse({"error": "No schedule exist for student"}, status=404)
 

@@ -1,11 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
 class Monday(models.Model):
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)
     student_id = models.CharField(max_length=10, null=True, blank=True)
+
 
 class Tuesday(models.Model):
     period1 = models.CharField(max_length=50)
@@ -13,11 +15,13 @@ class Tuesday(models.Model):
     period3 = models.CharField(max_length=50)
     student_id = models.CharField(max_length=10, null=True, blank=True)
 
+
 class Wednesday(models.Model):
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)
     student_id = models.CharField(max_length=10, null=True, blank=True)
+
 
 class Thursday(models.Model):
     period1 = models.CharField(max_length=50)
@@ -25,3 +29,31 @@ class Thursday(models.Model):
     period3 = models.CharField(max_length=50)
     student_id = models.CharField(max_length=10, null=True, blank=True)
 
+
+# Default schedules for users
+class DefaultMonday(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    period1 = models.CharField(max_length=50)
+    period2 = models.CharField(max_length=50)
+    period3 = models.CharField(max_length=50)
+
+
+class DefaultTuesday(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    period1 = models.CharField(max_length=50)
+    period2 = models.CharField(max_length=50)
+    period3 = models.CharField(max_length=50)
+
+
+class DefaultWednesday(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    period1 = models.CharField(max_length=50)
+    period2 = models.CharField(max_length=50)
+    period3 = models.CharField(max_length=50)
+
+
+class DefaultThursday(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    period1 = models.CharField(max_length=50)
+    period2 = models.CharField(max_length=50)
+    period3 = models.CharField(max_length=50)

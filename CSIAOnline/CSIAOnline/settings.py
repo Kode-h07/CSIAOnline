@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-p#s0u&ygrjnecd7rl3^*epzpzn0i14%19=4rsaq*vbpzwbv0uy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     "home",
     "login",
     "counsel",
-    'rest_framework',
+    "rest_framework",
     "yaja",
+    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -57,12 +58,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "CSIAOnline.urls"
 
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'templates')],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'Asia/Seoul'
+TIME_ZONE = "Asia/Seoul"
 
 USE_I18N = True
 
@@ -131,19 +132,21 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-AUTH_USER_MODEL = 'login.CustomUser'
+AUTH_USER_MODEL = "login.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
+    "django.contrib.auth.backends.ModelBackend",
     # Add other authentication backends if needed
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',  # Optional: for browsable API
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",  # Optional: for browsable API
         # Add other renderers as needed
     ],
-    
-    # Other DRF settings...
 }
+
+CRONJOBS = [
+    ("0 0 * * FRI", "CSIAOnline.management.commands.reset"),
+]

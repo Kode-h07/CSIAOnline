@@ -112,7 +112,7 @@ function updateTodaySchedule() {
       console.log("got response");
       if (data.status == "success") {
         alert("Successfully changed today's schedule!");
-        window.location.href("http://127.0.0.1:8000"); // Reload the page after successful update
+        window.location.reload(); // Reload the page after successful update
       } else {
         console.error(
           "Error in updateTodaySchedule: Unexpected response",
