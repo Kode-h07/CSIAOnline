@@ -32,28 +32,28 @@ class Thursday(models.Model):
 
 # Default schedules for users
 class DefaultMonday(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=10, null=True, blank=True)
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)
 
 
 class DefaultTuesday(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=10, null=True, blank=True)
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)
 
 
 class DefaultWednesday(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=10, null=True, blank=True)
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)
 
 
 class DefaultThursday(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    student_id = models.CharField(max_length=10, null=True, blank=True)
     period1 = models.CharField(max_length=50)
     period2 = models.CharField(max_length=50)
     period3 = models.CharField(max_length=50)

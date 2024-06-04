@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "counsel",
     "rest_framework",
     "yaja",
-    "django_crontab",
 ]
 
 MIDDLEWARE = [
@@ -120,11 +119,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -147,6 +148,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-CRONJOBS = [
-    ("0 0 * * FRI", "CSIAOnline.management.commands.reset"),
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

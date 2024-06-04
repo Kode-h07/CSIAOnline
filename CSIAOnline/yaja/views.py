@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 import json
+from django.core.exceptions import ObjectDoesNotExist
+from .reset import reset_schedules
 from .models import (
     Monday,
     Tuesday,
@@ -24,7 +26,6 @@ from .serializers import (
     DefaultThursdaySerializer,
 )
 from datetime import datetime
-from django.contrib.auth.decorators import login_required
 
 
 def get_schedule_model_for_current_day(student_id):
@@ -45,7 +46,6 @@ def get_schedule_model_for_current_day(student_id):
 
 
 @csrf_exempt
-@login_required
 def yaja_view(request):
     current_student_id = request.user.student_id
     schedule = get_schedule_model_for_current_day(current_student_id)
@@ -138,18 +138,25 @@ def yaja_view(request):
             wednesday = data.get("Wednesday")
             thursday = data.get("Thursday")
 
-            default_monday, created = DefaultMonday.objects.get_or_create(
-                user=request.user
-            )
-            default_tuesday, created = DefaultTuesday.objects.get_or_create(
-                user=request.user
-            )
-            default_wednesday, created = DefaultWednesday.objects.get_or_create(
-                user=request.user
-            )
-            default_thursday, created = DefaultThursday.objects.get_or_create(
-                user=request.user
-            )
+            try:
+                default_monday = DefaultMonday.objects.get(student_id=current_student_id)
+            except ObjectDoesNotExist:
+                default_monday = DefaultMonday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+
+            try:
+                default_tuesday = DefaultTuesday.objects.get(student_id=current_student_id)
+            except ObjectDoesNotExist:
+                default_tuesday = DefaultTuesday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+
+            try:
+                default_wednesday = DefaultWednesday.objects.get(student_id=current_student_id)
+            except ObjectDoesNotExist:
+                default_wednesday = DefaultWednesday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+
+            try:
+                default_thursday = DefaultThursday.objects.get(student_id=current_student_id)
+            except ObjectDoesNotExist:
+                default_thursday = DefaultThursday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
 
             # Update the period data
             default_monday.period1 = monday.get("period1")
@@ -208,7 +215,10 @@ def yaja_view(request):
                 Tuesday_serializer.save()
                 Wednesday_serializer.save()
                 Thursday_serializer.save()
-                return JsonResponse({"status": "echo"}, status=200)
+                print("before reset")
+                reset_schedules(request.user)
+                print("after reset")
+                return JsonResponse({"status": "echo", "student_id": current_student_id}, status=200)
         except (
             DefaultMonday.DoesNotExist,
             DefaultTuesday.DoesNotExist,
@@ -217,43 +227,36 @@ def yaja_view(request):
         ):
             return JsonResponse({"error": "No schedule exist for student"}, status=404)
 
-        return JsonResponse({"status": "success"}, content_type="application/json")
 
     elif request.method == "GET":
         if request.headers.get("Accept") == "application/json":
+            print("GET backend success reached")
 
             # Retrieve existing schedule data
             # You need to provide the student_id here. I'm assuming you have a way to get it.
             try:
-                monday_schedule = Monday.objects.get(student_id=current_student_id)
-                tuesday_schedule = Tuesday.objects.get(student_id=current_student_id)
-                wednesday_schedule = Wednesday.objects.get(
-                    student_id=current_student_id
-                )
-                thursday_schedule = Thursday.objects.get(student_id=current_student_id)
-            except (
-                Monday.DoesNotExist,
-                Tuesday.DoesNotExist,
-                Wednesday.DoesNotExist,
-                Thursday.DoesNotExist,
-            ):
-                raise ValueError("error in finding entire schedule")
+                monday_schedule = DefaultMonday.objects.get(student_id=current_student_id)
+                tuesday_schedule = DefaultTuesday.objects.get(student_id=current_student_id)
+                wednesday_schedule = DefaultWednesday.objects.get(student_id=current_student_id)
+                thursday_schedule = DefaultThursday.objects.get(student_id=current_student_id)
+                print("Monday schedule retrieved")
+            except:
+                print("Monday schedule does not exist, creating default schedules")
+                monday_schedule = DefaultMonday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+                tuesday_schedule = DefaultTuesday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+                wednesday_schedule = DefaultWednesday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
+                thursday_schedule = DefaultThursday.objects.create(student_id=current_student_id, period1="yaja", period2="yaja", period3="yaja")
 
             # Serialize the data
-            serializer_monday = MondaySerializer(monday_schedule)
-            serializer_tuesday = TuesdaySerializer(tuesday_schedule)
-            serializer_wednesday = WednesdaySerializer(wednesday_schedule)
-            serializer_thursday = ThursdaySerializer(thursday_schedule)
+            serializer_monday = DefaultMondaySerializer(monday_schedule)
+            serializer_tuesday = DefaultTuesdaySerializer(tuesday_schedule)
+            serializer_wednesday = DefaultWednesdaySerializer(wednesday_schedule)
+            serializer_thursday = DefaultThursdaySerializer(thursday_schedule)
 
+            print(serializer_monday.data)
             # Combine serialized data into response
-            response_data = {
-                "monday": serializer_monday.data,
-                "tuesday": serializer_tuesday.data,
-                "wednesday": serializer_wednesday.data,
-                "thursday": serializer_thursday.data,
-                "action": "retrieve",
-            }
+            response_data = {"monday": serializer_monday.data,"tuesday": serializer_tuesday.data,"wednesday": serializer_wednesday.data,"thursday": serializer_thursday.data,"action": "retrieve"}
 
-            return JsonResponse(response_data, content_type="application/json")
+            return JsonResponse(response_data)
 
     return render(request, "yaja.html", {"Yaja": schedule})

@@ -1,7 +1,7 @@
 // Function to update the entire schedule
 // Function to get the selected value of a dropdown
 
-apiURL = "http://127.0.0.1:8000/yaja/";
+apiURL = "http://127.0.0.1:8000";
 
 function getSelectedValue(dropdownId) {
   let dropdown = document.getElementById(dropdownId);
@@ -34,7 +34,7 @@ function updateEntireSchedule() {
   console.log(selectedValues);
 
   // Make the request to the backend API to update the entire schedule
-  fetch(apiURL, {
+  fetch(apiURL+"/yaja", {
     method: "POST", // Assuming it's always a POST request for updating the entire schedule
     headers: {
       "Content-Type": "application/json",
@@ -43,6 +43,7 @@ function updateEntireSchedule() {
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log(data.student_id)
       if (data.status === "echo") {
         alert("Successfully changed entire schedule!");
         window.location.reload(); // Reload the page after successful update
@@ -59,28 +60,43 @@ function updateEntireSchedule() {
 }
 
 function retreiveSchedule() {
-  req = { action: "retrieve" };
-  fetch(apiURL, {
-    method: "GET", // Assuming it's always a POST request for updating the entire schedule
+  console.log('Sending GET request to:', apiURL+"/yaja");
+  fetch(apiURL+"/yaja", {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify(req),
   })
     .then((response) => response.json())
     .then((data) => {
+      console.log('Received response:', data);
       if (data.action === "retrieve") {
-        ["Monday", "Tuesday", "Wednesday", "Thursday"].forEach((day) => {
-          for (let period_num = 1; period_num <= 3; period_num++) {
-            let periodId = `period${period_num}-${day}`;
-            document.getElementById(periodId).value = data.day.period_num;
-          }
-        });
+        console.log("GET request responded");
+        
+        // Monday
+        document.getElementById("period1-Monday").value = data.monday.period1;
+        document.getElementById("period2-Monday").value = data.monday.period2;
+        document.getElementById("period3-Monday").value = data.monday.period3;
+    
+        // Tuesday
+        document.getElementById("period1-Tuesday").value = data.tuesday.period1;
+        document.getElementById("period2-Tuesday").value = data.tuesday.period2;
+        document.getElementById("period3-Tuesday").value = data.tuesday.period3;
+    
+        // Wednesday
+        document.getElementById("period1-Wednesday").value = data.wednesday.period1;
+        document.getElementById("period2-Wednesday").value = data.wednesday.period2;
+        document.getElementById("period3-Wednesday").value = data.wednesday.period3;
+    
+        // Thursday
+        document.getElementById("period1-Thursday").value = data.thursday.period1;
+        document.getElementById("period2-Thursday").value = data.thursday.period2;
+        document.getElementById("period3-Thursday").value = data.thursday.period3;
       }
     })
     .catch((error) => {
-      console.error("Error in updateEntireSchedule:", error);
+      console.error("Error in retrieveSchedule:", error);
     });
 }
 
@@ -99,7 +115,7 @@ function updateTodaySchedule() {
   console.log(selectedValues);
 
   // Make the request to the backend API to update today's schedule
-  fetch(apiURL, {
+  fetch(apiURL+"/yaja", {
     method: "PUT", // Assuming it's always a PUT request for updating today's schedule
     headers: {
       "Content-Type": "application/json",
@@ -147,7 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("yaja_Form")
     .addEventListener("submit", function (event) {
-      console.log("clickeeed");
+      console.log("clickeeed the submit for today button");
       event.preventDefault();
       updateTodaySchedule();
     });
@@ -155,15 +171,15 @@ document.addEventListener("DOMContentLoaded", function () {
   document
     .getElementById("scheduleForm")
     .addEventListener("submit", function (event) {
-      console.log("clickeeed");
+      console.log("clickeeed the submit button");
       event.preventDefault();
       updateEntireSchedule();
     });
 
   document
     .getElementById("modalpop")
-    .addEventListener("submit", function (event) {
-      console.log("clickeeed");
+    .addEventListener("click", function (event) {
+      console.log("clickeeed to enable retrieveschedule");
       event.preventDefault();
       retreiveSchedule();
     });
