@@ -34,7 +34,7 @@ function updateEntireSchedule() {
   console.log(selectedValues);
 
   // Make the request to the backend API to update the entire schedule
-  fetch(apiURL+"/yaja", {
+  fetch(apiURL+"/yaja/", {
     method: "POST", // Assuming it's always a POST request for updating the entire schedule
     headers: {
       "Content-Type": "application/json",
@@ -61,7 +61,7 @@ function updateEntireSchedule() {
 
 function retreiveSchedule() {
   console.log('Sending GET request to:', apiURL+"/yaja");
-  fetch(apiURL+"/yaja", {
+  fetch(apiURL+"/yaja/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -115,7 +115,7 @@ function updateTodaySchedule() {
   console.log(selectedValues);
 
   // Make the request to the backend API to update today's schedule
-  fetch(apiURL+"/yaja", {
+  fetch(apiURL+"/yaja/", {
     method: "PUT", // Assuming it's always a PUT request for updating today's schedule
     headers: {
       "Content-Type": "application/json",

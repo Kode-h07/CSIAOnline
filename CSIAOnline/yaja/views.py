@@ -172,24 +172,24 @@ def yaja_view(request):
             default_thursday.period2 = thursday.get("period2")
             default_thursday.period3 = thursday.get("period3")
             mon = {
-                "period1": default_monday.get("period1"),
-                "period2": default_monday.get("period2"),
-                "period3": default_monday.get("period3"),
+                "period1": default_monday.period1,
+                "period2": default_monday.period2,
+                "period3": default_monday.period3,
             }
             tue = {
-                "period1": default_tuesday.get("period1"),
-                "period2": default_tuesday.get("period2"),
-                "period3": default_tuesday.get("period3"),
+                "period1": default_tuesday.period1,
+                "period2": default_tuesday.period2,
+                "period3": default_tuesday.period3,
             }
             wed = {
-                "period1": default_wednesday.get("period1"),
-                "period2": default_wednesday.get("period2"),
-                "period3": default_wednesday.get("period3"),
+                "period1": default_wednesday.period1,
+                "period2": default_wednesday.period2,
+                "period3": default_wednesday.period3,
             }
             thur = {
-                "period1": default_thursday.get("period1"),
-                "period2": default_thursday.get("period2"),
-                "period3": default_thursday.get("period3"),
+                "period1": default_thursday.period1,
+                "period2": default_thursday.period2,
+                "period3": default_thursday.period3,
             }
 
             # Save the changes
@@ -216,7 +216,7 @@ def yaja_view(request):
                 Wednesday_serializer.save()
                 Thursday_serializer.save()
                 print("before reset")
-                reset_schedules(request.user)
+                reset_schedules(current_student_id)
                 print("after reset")
                 return JsonResponse({"status": "echo", "student_id": current_student_id}, status=200)
         except (

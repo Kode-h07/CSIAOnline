@@ -17,27 +17,27 @@ User = get_user_model()
 
 def reset_schedules(user):
     try:
-        default_monday = DefaultMonday.objects.get(user=user)
-        default_tuesday = DefaultTuesday.objects.get(user=user)
-        default_wednesday = DefaultWednesday.objects.get(user=user)
-        default_thursday = DefaultThursday.objects.get(user=user)
+        default_monday = DefaultMonday.objects.get(student_id=user)
+        default_tuesday = DefaultTuesday.objects.get(student_id=user)
+        default_wednesday = DefaultWednesday.objects.get(student_id=user)
+        default_thursday = DefaultThursday.objects.get(student_id=user)
 
-        Monday.objects.filter(student_id=user.student_id).update(
+        Monday.objects.filter(student_id=user).update(
             period1=default_monday.period1,
             period2=default_monday.period2,
             period3=default_monday.period3,
         )
-        Tuesday.objects.filter(student_id=user.student_id).update(
+        Tuesday.objects.filter(student_id=user).update(
             period1=default_tuesday.period1,
             period2=default_tuesday.period2,
             period3=default_tuesday.period3,
         )
-        Wednesday.objects.filter(student_id=user.student_id).update(
+        Wednesday.objects.filter(student_id=user).update(
             period1=default_wednesday.period1,
             period2=default_wednesday.period2,
             period3=default_wednesday.period3,
         )
-        Thursday.objects.filter(student_id=user.student_id).update(
+        Thursday.objects.filter(student_id=user).update(
             period1=default_thursday.period1,
             period2=default_thursday.period2,
             period3=default_thursday.period3,
