@@ -1,9 +1,7 @@
 # views.py
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-#from rest_framework.JsonResponse import JsonResponse
 from django.http import JsonResponse
-from rest_framework import status
 from .models import Reservation
 from .serializers import ReservationSerializer
 import json
