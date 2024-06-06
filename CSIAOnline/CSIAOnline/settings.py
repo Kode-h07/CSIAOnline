@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 from celery.schedules import crontab
-from CSIAOnline.yaja.tasks import run_reset_script
+from yaja.tasks import run_reset_script
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -60,7 +60,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
     'run-reset-every-friday': {
-        'task': 'CSIAOnline.yaja.tasks.run_reset_script',
+        'task': 'yaja.tasks.run_reset_script',
         'schedule': crontab(hour=12, minute=0, day_of_week='friday'),
     },
 }
