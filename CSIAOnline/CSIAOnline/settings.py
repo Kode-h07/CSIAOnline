@@ -49,19 +49,20 @@ INSTALLED_APPS = [
     "rest_framework"
 ]
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_BACKEND = 'django-db'
-CELERY_TIMEZONE = 'Asia/Seoul'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+accept_content = ['application/json']
+result_serializer = 'json'
+task_serializer = 'json'
+result_backend = 'django-db'
+timezone = 'Asia/Seoul'
+
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 CELERY_BEAT_SCHEDULE = {
     'run-reset-every-friday': {
         'task': 'yaja.tasks.run_reset_script',
-        'schedule': crontab(hour=12, minute=0, day_of_week='friday'),
+        'schedule': crontab(hour=23, minute=10, day_of_week='fri'),
     },
 }
 

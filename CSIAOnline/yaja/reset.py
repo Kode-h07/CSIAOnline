@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.contrib.auth import get_user_model
-from .models import (
+from yaja.models import (
     Monday,
     Tuesday,
     Wednesday,
