@@ -1,15 +1,14 @@
 from __future__ import absolute_import, unicode_literals
-import os
-from celery import Celery, shared_task
+from celery import shared_task
+from django.core.management import call_command
 
 @shared_task
 def run_reset_script():
     try:
-        # Define the path to the reset.py script
-        script_path = os.path.join(os.path.dirname(__file__), 'reset.py')
-        print(f"Running script: {script_path}")
-
-        # Execute the reset.py script
-        exec(open(script_path).read())
+        from .management.commands.reset_schedules import reset_schedules
+        # Call the Django management command 'reset_schedules'
+        call_command('reset_schedules')
+        print("reset complete")
+        print("Successfully ran reset_schedules management command")
     except Exception as e:
         print(f"Reset script error: {e}")

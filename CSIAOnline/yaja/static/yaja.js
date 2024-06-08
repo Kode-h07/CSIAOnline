@@ -18,7 +18,7 @@ function getSelectedValue(dropdownId) {
   }
 }
 
-function updateEntireSchedule() {
+function updateDefaultSchedule() {
   // Retrieve selected values from the
   let selectedValues = {};
 
@@ -26,7 +26,7 @@ function updateEntireSchedule() {
   ["Monday", "Tuesday", "Wednesday", "Thursday"].forEach((day) => {
     selectedValues[day] = {};
     for (let period_num = 1; period_num <= 3; period_num++) {
-      let periodId = `period${period_num}-${day}`;
+      let periodId = `default-period${period_num}-${day}`;
       selectedValues[day][`period${period_num}`] = getSelectedValue(periodId);
     }
   });
@@ -34,7 +34,7 @@ function updateEntireSchedule() {
   console.log(selectedValues);
 
   // Make the request to the backend API to update the entire schedule
-  fetch(apiURL+"/yaja/", {
+  fetch(apiURL + "/yaja/", {
     method: "POST", // Assuming it's always a POST request for updating the entire schedule
     headers: {
       "Content-Type": "application/json",
@@ -43,56 +43,68 @@ function updateEntireSchedule() {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data.student_id)
+      console.log(data.student_id);
       if (data.status === "echo") {
-        alert("Successfully changed entire schedule!");
+        alert("Successfully changed Default schedule!");
         window.location.reload(); // Reload the page after successful update
       } else {
         console.error(
-          "Error in updateEntireSchedule: Unexpected response",
+          "Error in updateDefaultSchedule: Unexpected response",
           data
         );
       }
     })
     .catch((error) => {
-      console.error("Error in updateEntireSchedule:", error);
+      console.error("Error in updateDefaultSchedule:", error);
     });
 }
 
-function retreiveSchedule() {
-  console.log('Sending GET request to:', apiURL+"/yaja");
-  fetch(apiURL+"/yaja/", {
+function retrieveDefaultSchedule() {
+  console.log("Sending GET request to:", apiURL + "/yaja");
+  fetch(apiURL + "/yaja/", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Accept: "application/json",
+      "X-Schedule-Type": "default",
     },
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log('Received response:', data);
+      console.log("Received response:", data);
       if (data.action === "retrieve") {
         console.log("GET request responded");
-        
+
         // Monday
-        document.getElementById("period1-Monday").value = data.monday.period1;
-        document.getElementById("period2-Monday").value = data.monday.period2;
-        document.getElementById("period3-Monday").value = data.monday.period3;
-    
+        document.getElementById("default-period1-Monday").value =
+          data.monday.period1;
+        document.getElementById("default-period2-Monday").value =
+          data.monday.period2;
+        document.getElementById("default-period3-Monday").value =
+          data.monday.period3;
+
         // Tuesday
-        document.getElementById("period1-Tuesday").value = data.tuesday.period1;
-        document.getElementById("period2-Tuesday").value = data.tuesday.period2;
-        document.getElementById("period3-Tuesday").value = data.tuesday.period3;
-    
+        document.getElementById("default-period1-Tuesday").value =
+          data.tuesday.period1;
+        document.getElementById("default-period2-Tuesday").value =
+          data.tuesday.period2;
+        document.getElementById("default-period3-Tuesday").value =
+          data.tuesday.period3;
+
         // Wednesday
-        document.getElementById("period1-Wednesday").value = data.wednesday.period1;
-        document.getElementById("period2-Wednesday").value = data.wednesday.period2;
-        document.getElementById("period3-Wednesday").value = data.wednesday.period3;
-    
+        document.getElementById("default-period1-Wednesday").value =
+          data.wednesday.period1;
+        document.getElementById("default-period2-Wednesday").value =
+          data.wednesday.period2;
+        document.getElementById("default-period3-Wednesday").value =
+          data.wednesday.period3;
+
         // Thursday
-        document.getElementById("period1-Thursday").value = data.thursday.period1;
-        document.getElementById("period2-Thursday").value = data.thursday.period2;
-        document.getElementById("period3-Thursday").value = data.thursday.period3;
+        document.getElementById("default-period1-Thursday").value =
+          data.thursday.period1;
+        document.getElementById("default-period2-Thursday").value =
+          data.thursday.period2;
+        document.getElementById("default-period3-Thursday").value =
+          data.thursday.period3;
       }
     })
     .catch((error) => {
@@ -101,43 +113,95 @@ function retreiveSchedule() {
 }
 
 // Function to update today's schedule
-function updateTodaySchedule() {
-  // Retrieve selected values from the
-  console.log("success in front");
-  let selectedValues = {};
+function updateWeekSchedule() {
+  // Retrieve selected values from the inputs for Monday to Thursday
+  let updatedValues = {
+    Monday: {},
+    Tuesday: {},
+    Wednesday: {},
+    Thursday: {},
+  };
 
-  // Loop through periods 1, 2, and 3 to get selected values
-  for (let period_num = 1; period_num <= 3; period_num++) {
-    let periodId = `period${period_num}`;
-    selectedValues[periodId] = getSelectedValue(periodId);
+  // Loop through days and periods to get selected values
+  let days = ["Monday", "Tuesday", "Wednesday", "Thursday"];
+  for (let day of days) {
+    for (let period_num = 1; period_num <= 3; period_num++) {
+      let periodId = `period${period_num}-${day}`;
+      updatedValues[day][`period${period_num}`] =
+        document.getElementById(periodId).value;
+    }
   }
 
-  console.log(selectedValues);
+  console.log(updatedValues);
 
-  // Make the request to the backend API to update today's schedule
-  fetch(apiURL+"/yaja/", {
-    method: "PUT", // Assuming it's always a PUT request for updating today's schedule
+  // Make the request to the backend API to update this week's schedule
+  fetch(apiURL + "/yaja/", {
+    method: "PUT", // PUT request to update the entire week's schedule
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(selectedValues),
+    body: JSON.stringify(updatedValues),
   })
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
       console.log("got response");
       if (data.status == "success") {
-        alert("Successfully changed today's schedule!");
+        alert("Successfully changed this week's schedule!");
         window.location.reload(); // Reload the page after successful update
       } else {
-        console.error(
-          "Error in updateTodaySchedule: Unexpected response",
-          data
-        );
+        console.error("Error in updateWeekSchedule: Unexpected response", data);
       }
     })
     .catch((error) => {
-      console.error("Error in updateTodaySchedule:", error);
+      console.error("Error in updateWeekSchedule:", error);
+    });
+}
+
+function retrieveCurrentSchedule() {
+  console.log("Sending GET request to:", apiURL + "/yaja");
+  fetch(apiURL + "/yaja/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Schedule-Type": "current",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Received response:", data);
+      if (data.action === "retrieve") {
+        console.log("GET request responded");
+
+        // Monday
+        document.getElementById("period1-Monday").value = data.monday.period1;
+        document.getElementById("period2-Monday").value = data.monday.period2;
+        document.getElementById("period3-Monday").value = data.monday.period3;
+
+        // Tuesday
+        document.getElementById("period1-Tuesday").value = data.tuesday.period1;
+        document.getElementById("period2-Tuesday").value = data.tuesday.period2;
+        document.getElementById("period3-Tuesday").value = data.tuesday.period3;
+
+        // Wednesday
+        document.getElementById("period1-Wednesday").value =
+          data.wednesday.period1;
+        document.getElementById("period2-Wednesday").value =
+          data.wednesday.period2;
+        document.getElementById("period3-Wednesday").value =
+          data.wednesday.period3;
+
+        // Thursday
+        document.getElementById("period1-Thursday").value =
+          data.thursday.period1;
+        document.getElementById("period2-Thursday").value =
+          data.thursday.period2;
+        document.getElementById("period3-Thursday").value =
+          data.thursday.period3;
+      }
+    })
+    .catch((error) => {
+      console.error("Error in retrieveSchedule:", error);
     });
 }
 
@@ -145,35 +209,22 @@ function updateTodaySchedule() {
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("loaded");
+  retrieveCurrentSchedule();
   // Attach change event listener to all select elements
-  document.querySelectorAll("select").forEach((dropdown) => {
-    dropdown.addEventListener("change", function () {
-      let period = this.id;
-      let othersDetailInput = document.getElementById(
-        `${period}-others-detail`
-      );
-
-      if (this.value === "others") {
-        othersDetailInput.style.display = "block";
-      } else {
-        othersDetailInput.style.display = "none";
-      }
-    });
-  });
   document
-    .getElementById("yaja_Form")
+    .getElementById("weekForm")
     .addEventListener("submit", function (event) {
       console.log("clickeeed the submit for today button");
       event.preventDefault();
-      updateTodaySchedule();
+      updateWeekSchedule();
     });
 
   document
-    .getElementById("scheduleForm")
+    .getElementById("defaultForm")
     .addEventListener("submit", function (event) {
       console.log("clickeeed the submit button");
       event.preventDefault();
-      updateEntireSchedule();
+      updateDefaultSchedule();
     });
 
   document
@@ -181,6 +232,6 @@ document.addEventListener("DOMContentLoaded", function () {
     .addEventListener("click", function (event) {
       console.log("clickeeed to enable retrieveschedule");
       event.preventDefault();
-      retreiveSchedule();
+      retrieveDefaultSchedule();
     });
 });

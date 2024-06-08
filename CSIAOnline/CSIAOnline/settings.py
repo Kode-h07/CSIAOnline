@@ -62,7 +62,7 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 CELERY_BEAT_SCHEDULE = {
     'run-reset-every-friday': {
         'task': 'yaja.tasks.run_reset_script',
-        'schedule': crontab(hour=23, minute=10, day_of_week='fri'),
+        'schedule': crontab(hour=13, minute=59, day_of_week='sat'),
     },
 }
 
@@ -151,7 +151,11 @@ USE_I18N = True
 USE_TZ = True
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",
+    BASE_DIR / "counsel" / "static",
+    BASE_DIR / "home" / "static",
+    BASE_DIR / "yaja" / "static",
+    BASE_DIR / "login" / "static",
 ]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -185,4 +189,4 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / "collected_static"
