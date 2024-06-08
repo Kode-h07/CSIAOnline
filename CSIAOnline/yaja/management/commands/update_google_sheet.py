@@ -3,7 +3,7 @@ import datetime
 from ...models import Monday, Tuesday, Wednesday, Thursday  # Update with your app name
 from django.core.management.base import BaseCommand
 
-GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGpG1culjD-kgrqO5MdJSy2rZpWpxPUv_9RcjkoS2IgmVonnV8PBUayTTdwgJz-Dlp/exec'
+GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyy7dyS1N4U657QY_j_zfgS38q1m1zUY2DeXpECE5oPoqPxImsn_OfRNfnCBizBV9AQ/exec'
 def fetch_schedule():
     day_of_week = datetime.datetime.today().weekday()
     if (day_of_week  == 0 or day_of_week == 4 or day_of_week == 5 or day_of_week==6):

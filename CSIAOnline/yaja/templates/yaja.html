@@ -261,28 +261,28 @@
 
     
     <div class="content-wrapper">
-        <h1 class="text-center mb-4">야자 Schedule</h1>
+        <h1 class="text-center mb-4">야자 일정표</h1>
         <div class="table-wrapper">
             <div class="table-container">
-                <h2 class="text-center">Today 야자</h2>
+                <h2 class="text-center">오늘의 야자</h2>
                 <table class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Time Slot</th>
-                            <th>Current Selection</th>
+                            <th>교시</th>
+                            <th>현재 선택</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1st Period</td>
+                            <td>1교시</td>
                             <td>{{ Yaja.period1 }}</td>
                         </tr>
                         <tr>
-                            <td>2nd Period</td>
+                            <td>2교시</td>
                             <td>{{ Yaja.period2 }}</td>
                         </tr>
                         <tr>
-                            <td>3rd Period</td>
+                            <td>3교시</td>
                             <td>{{ Yaja.period3 }}</td>
                         </tr>
                     </tbody>
@@ -290,20 +290,20 @@
             </div>
             <div class="table-container">
                 <form id="weekForm" action="/" method="put">
-                    <h2 class="text-center">야자 Schedule</h2>
+                    <h2 class="text-center">야자 일정표</h2>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Time Slot</th>
-                                <th>Monday</th>
-                                <th>Tuesday</th>
-                                <th>Wednesday</th>
-                                <th>Thursday</th>
+                                <th>교시</th>
+                                <th>월요일</th>
+                                <th>화요일</th>
+                                <th>수요일</th>
+                                <th>목요일</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>1st Period</td>
+                                <td>1교시</td>
                                 <td>
                                     <select class="form-control form-control-lg period-select" id="period1-Monday">
                                         <option value="야자">야자</option>
@@ -338,7 +338,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>2nd Period</td>
+                                <td>2교시</td>
                                 <td>
                                     <select class="form-control form-control-lg period-select" id="period2-Monday">
                                         <option value="야자">야자</option>
@@ -373,7 +373,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>3rd Period</td>
+                                <td>3교시</td>
                                 <td>
                                     <select class="form-control form-control-lg period-select" id="period3-Monday">
                                         <option value="야자">야자</option>
@@ -424,7 +424,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="defaultsetmodalarea">Apply Weekly Schedule</h5>
+                    <h5 class="modal-title" id="defaultsetmodalarea">야자 기본값 적용</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -432,15 +432,16 @@
                         <table class="table table-bordered table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th>Day</th>
-                                    <th>1st Period</th>
-                                    <th>2nd Period</th>
-                                    <th>3rd Period</th>
+                                    <th>교시</th>
+                                    <th>월요일</th>
+                                    <th>화요일</th>
+                                    <th>수요일</th>
+                                    <th>목요일</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Monday</td>
+                                    <td>1교시</td>
                                     <td>
                                         <select class="form-control form-control-lg week-period-select" id="default-period1-Monday" data-period="1" data-day="1">
                                             <option value="야자">야자</option>
@@ -450,7 +451,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period2-Monday" data-period="2" data-day="1">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Tuesday" data-period="1" data-day="2">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
@@ -458,7 +459,15 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Monday" data-period="3" data-day="1">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Wednesday" data-period="1" data-day="3">
+                                            <option value="야자">야자</option>
+                                            <option value="조퇴">조퇴</option>
+                                            <option value="외출/현체">외출/현체</option>
+                                            <option value="주문형강좌/방과후">주문형강좌/방과후</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Thursday" data-period="1" data-day="4">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
@@ -467,9 +476,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Tuesday</td>
+                                    <td>2교시</td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Tuesday" data-period="1" data-day="2">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period2-Monday" data-period="2" data-day="1">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
@@ -485,25 +494,6 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Tuesday" data-period="3" data-day="2">
-                                            <option value="야자">야자</option>
-                                            <option value="조퇴">조퇴</option>
-                                            <option value="외출/현체">외출/현체</option>
-                                            <option value="주문형강좌/방과후">주문형강좌/방과후</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Wednesday</td>
-                                    <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Wednesday" data-period="1" data-day="3">
-                                            <option value="야자">야자</option>
-                                            <option value="조퇴">조퇴</option>
-                                            <option value="외출/현체">외출/현체</option>
-                                            <option value="주문형강좌/방과후">주문형강좌/방과후</option>
-                                        </select>
-                                    </td>
-                                    <td>
                                         <select class="form-control form-control-lg week-period-select" id="default-period2-Wednesday" data-period="2" data-day="3">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
@@ -512,7 +502,7 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Wednesday" data-period="3" data-day="3">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period2-Thursday" data-period="2" data-day="4">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
@@ -521,9 +511,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Thursday</td>
+                                    <td>3교시</td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period1-Thursday" data-period="1" data-day="4">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Monday" data-period="3" data-day="1">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
@@ -531,7 +521,15 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="form-control form-control-lg week-period-select" id="default-period2-Thursday" data-period="2" data-day="4">
+                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Tuesday" data-period="3" data-day="2">
+                                            <option value="야자">야자</option>
+                                            <option value="조퇴">조퇴</option>
+                                            <option value="외출/현체">외출/현체</option>
+                                            <option value="주문형강좌/방과후">주문형강좌/방과후</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control form-control-lg week-period-select" id="default-period3-Wednesday" data-period="3" data-day="3">
                                             <option value="야자">야자</option>
                                             <option value="조퇴">조퇴</option>
                                             <option value="외출/현체">외출/현체</option>
