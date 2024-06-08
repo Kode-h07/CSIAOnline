@@ -89,9 +89,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 monday = Monday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             monday.period1 = monday_data.get("period1")
             monday.period2 = monday_data.get("period2")
@@ -104,9 +104,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 tuesday = Tuesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             tuesday.period1 = tuesday_data.get("period1")
             tuesday.period2 = tuesday_data.get("period2")
@@ -119,9 +119,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 wednesday = Wednesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             wednesday.period1 = wednesday_data.get("period1")
             wednesday.period2 = wednesday_data.get("period2")
@@ -134,9 +134,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 thursday = Thursday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             thursday.period1 = thursday_data.get("period1")
             thursday.period2 = thursday_data.get("period2")
@@ -172,9 +172,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 default_monday = DefaultMonday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             try:
@@ -184,9 +184,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 default_tuesday = DefaultTuesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             try:
@@ -196,9 +196,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 default_wednesday = DefaultWednesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             try:
@@ -208,9 +208,9 @@ def yaja_view(request):
             except ObjectDoesNotExist:
                 default_thursday = DefaultThursday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             # Update the period data
@@ -308,27 +308,27 @@ def yaja_view(request):
                 print("Monday schedule does not exist, creating default schedules")
                 monday_schedule = DefaultMonday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
                 tuesday_schedule = DefaultTuesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
                 wednesday_schedule = DefaultWednesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
                 thursday_schedule = DefaultThursday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             # Serialize the data
@@ -360,18 +360,18 @@ def yaja_view(request):
                 print("All schedule retrieved")
 
                 # Check and assign "yaja" if any period is null
-                if not monday_schedule.period1: monday_schedule.period1 = "yaja"
-                if not monday_schedule.period2: monday_schedule.period2 = "yaja"
-                if not monday_schedule.period3: monday_schedule.period3 = "yaja"
-                if not tuesday_schedule.period1: tuesday_schedule.period1 = "yaja"
-                if not tuesday_schedule.period2: tuesday_schedule.period2 = "yaja"
-                if not tuesday_schedule.period3: tuesday_schedule.period3 = "yaja"
-                if not wednesday_schedule.period1: wednesday_schedule.period1 = "yaja"
-                if not wednesday_schedule.period2: wednesday_schedule.period2 = "yaja"
-                if not wednesday_schedule.period3: wednesday_schedule.period3 = "yaja"
-                if not thursday_schedule.period1: thursday_schedule.period1 = "yaja"
-                if not thursday_schedule.period2: thursday_schedule.period2 = "yaja"
-                if not thursday_schedule.period3: thursday_schedule.period3 = "yaja"
+                if not monday_schedule.period1: monday_schedule.period1 = "야자"
+                if not monday_schedule.period2: monday_schedule.period2 = "야자"
+                if not monday_schedule.period3: monday_schedule.period3 = "야자"
+                if not tuesday_schedule.period1: tuesday_schedule.period1 = "야자"
+                if not tuesday_schedule.period2: tuesday_schedule.period2 = "야자"
+                if not tuesday_schedule.period3: tuesday_schedule.period3 = "야자"
+                if not wednesday_schedule.period1: wednesday_schedule.period1 = "야자"
+                if not wednesday_schedule.period2: wednesday_schedule.period2 = "야자"
+                if not wednesday_schedule.period3: wednesday_schedule.period3 = "야자"
+                if not thursday_schedule.period1: thursday_schedule.period1 = "야자"
+                if not thursday_schedule.period2: thursday_schedule.period2 = "야자"
+                if not thursday_schedule.period3: thursday_schedule.period3 = "야자"
 
                 # Save the changes
                 monday_schedule.save()
@@ -382,33 +382,33 @@ def yaja_view(request):
                 print("Monday schedule does not exist, creating default schedule")
                 monday_schedule = Monday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             except Tuesday.DoesNotExist:
                 print("Tuesday schedule does not exist, creating default schedule")
                 tuesday_schedule = Tuesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             except Wednesday.DoesNotExist:
                 print("Wednesday schedule does not exist, creating default schedule")
                 wednesday_schedule = Wednesday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
             except Thursday.DoesNotExist:
                 print("Thursday schedule does not exist, creating default schedule")
                 thursday_schedule = Thursday.objects.create(
                     student_id=current_student_id,
-                    period1="yaja",
-                    period2="yaja",
-                    period3="yaja",
+                    period1="야자",
+                    period2="야자",
+                    period3="야자",
                 )
 
             # Serialize the data

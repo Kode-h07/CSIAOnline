@@ -64,6 +64,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'yaja.tasks.run_reset_script',
         'schedule': crontab(hour=13, minute=59, day_of_week='sat'),
     },
+
+    'run-reset-every-day': {
+        'task': 'yaja.tasks.run_update_script',
+        'schedule': crontab(hour=16, minute=27, day_of_week='sat'),
+    },
 }
 
 CACHES = {

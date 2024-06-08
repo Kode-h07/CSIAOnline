@@ -12,3 +12,14 @@ def run_reset_script():
         print("Successfully ran reset_schedules management command")
     except Exception as e:
         print(f"Reset script error: {e}")
+
+@shared_task
+def run_update_script():
+    try:
+        from .management.commands.update_google_sheet import update_google_sheet
+        # Call the Django management command 'reset_schedules'
+        call_command('update_google_sheet')
+        print("update complete")
+        print("Successfully ran update_google_sheet management command")
+    except Exception as e:
+        print(f"Update script error: {e}")
